@@ -1,6 +1,7 @@
 import streamlit as st
 from components.agentmail_utils import create_inbox, send_email, list_inboxes
 import time
+import re
 
 st.set_page_config(page_title="Mail Agent", page_icon="📬", layout="wide")
 st.title("📬 Mail Agent")
@@ -30,25 +31,71 @@ if not create_new_inbox:
         st.error(f"Error loading inboxes: {e}")
         create_new_inbox = True
 
-recipient = st.text_input("Recipient Email")
+# Email Recipients Input
+st.write("**Recipient Emails** (paste multiple emails - any format works):")
+email_text = st.text_area(
+    "Recipients", 
+    placeholder="john@example.com\nmary@example.com\nbob@example.com\n\nOR paste: john@example.com, mary@example.com, bob@example.com",
+    height=100
+)
+
+recipients = []
+if email_text:
+    # Extract emails using regex pattern
+    email_pattern = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
+    recipients = re.findall(email_pattern, email_text)
+    
+    if recipients:
+        st.success(f"Found {len(recipients)} email(s):")
+        for i, email in enumerate(recipients, 1):
+            st.write(f"{i}. {email}")
+    else:
+        st.warning("No valid email addresses found. Please check your input.")
+
 subject = st.text_input("Subject")
 body = st.text_area("Message Body")
 
-if st.button("Send Email"):
-    if create_new_inbox:
-        with st.spinner("Creating new inbox..."):
-            inbox = create_inbox()  # Automatically create a new inbox
-            inbox_id = inbox.inbox_id
-            st.info(f"Created new inbox: {inbox_id}")
-            # Add a small delay to ensure inbox is ready
-            time.sleep(1)
-    
-    if inbox_id and recipient and subject:
-        try:
-            with st.spinner("Sending email..."):
-                response = send_email(inbox_id, recipient, subject, body)
-                st.success(f"Email sent successfully! Inbox ID: {inbox_id}, Message ID: {response.message_id}")
-        except Exception as e:
-            st.error(f"Error sending email: {e}")
+if st.button("Send Email(s)"):
+    if not recipients:
+        st.error("Please add at least one recipient email.")
+    elif not subject or not body:
+        st.error("Please fill in subject and message body.")
     else:
-        st.error("Please fill in all required fields.")
+        success_count = 0
+        failed_count = 0
+        
+        # Progress bar for multiple emails
+        if len(recipients) > 1:
+            progress_bar = st.progress(0)
+            status_text = st.empty()
+        
+        for i, recipient in enumerate(recipients):
+            try:
+                # Create new inbox for each email
+                with st.spinner(f"Creating new inbox for {recipient}..."):
+                    inbox = create_inbox()
+                    current_inbox_id = inbox.inbox_id
+                    st.info(f"Created inbox {current_inbox_id} for {recipient}")
+                    time.sleep(1)  # Small delay to ensure inbox is ready
+                
+                # Send email
+                with st.spinner(f"Sending email to {recipient}..."):
+                    response = send_email(current_inbox_id, recipient, subject, body)
+                    success_count += 1
+                    
+                    if len(recipients) == 1:
+                        st.success(f"✅ Email sent to {recipient}! Inbox: {current_inbox_id}, Message: {response.message_id}")
+                
+            except Exception as e:
+                failed_count += 1
+                st.error(f"❌ Failed to send email to {recipient}: {e}")
+            
+            # Update progress for multiple emails
+            if len(recipients) > 1:
+                progress = (i + 1) / len(recipients)
+                progress_bar.progress(progress)
+                status_text.text(f"Processing {i + 1}/{len(recipients)} emails...")
+        
+        # Final summary for multiple emails
+        if len(recipients) > 1:
+            st.success(f"🎉 Email sending complete! ✅ {success_count} successful, ❌ {failed_count} failed out of {len(recipients)} total emails.")
