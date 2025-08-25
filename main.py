@@ -1,5 +1,6 @@
 import streamlit as st
 from components.agentmail_utils import create_inbox, send_email, list_inboxes
+from components.ai_utils import generate_personalized_email
 import time
 import re
 
@@ -9,6 +10,25 @@ st.write("Welcome to the Mail Agent app! Manage your emails easily.")
 
 # Send Email
 st.header("Send Email")
+
+# Simple Settings
+st.subheader("Simple Settings")
+use_ai_customization = st.checkbox("Enable AI Customization", value=False, help="Uses Gemini AI to generate personalized emails based on recipient's email address")
+require_approval = st.checkbox("Require Approval for Each Email", value=True, help="Review and approve each email before sending")
+
+# Advanced Settings
+st.subheader("Advanced Settings")
+email_template = st.text_area(
+    "Email Template (optional)", 
+    placeholder="Hi {name},\n\nI noticed your work at {company} and wanted to reach out regarding {topic}.",
+    help="AI will enhance this template with personalized content"
+)
+prompt = st.text_area(
+    "Custom Prompt (optional)", 
+    placeholder="Write a professional email inviting {name} from {company} to collaborate on a new project.",
+    help="AI will generate emails based on this prompt"
+)
+bulk_approval = st.checkbox("Enable Bulk Approval", value=False, help="Review all generated emails at once instead of one by one")
 
 # Checkbox for creating a new inbox
 create_new_inbox = st.checkbox("Create a new inbox for each email", value=True)
@@ -78,10 +98,33 @@ if st.button("Send Email(s)"):
                     st.info(f"Created inbox {current_inbox_id} for {recipient}")
                     time.sleep(1)  # Small delay to ensure inbox is ready
                 
+                # Generate personalized email using Gemini AI
+                current_subject = subject
+                current_body = body
+                
+                if use_ai_customization or email_template or prompt:
+                    with st.spinner(f"Generating personalized email for {recipient}..."):
+                        ai_result = generate_personalized_email(
+                            recipient_email=recipient,
+                            template=email_template if email_template else None,
+                            prompt=prompt if prompt else None,
+                            subject=subject if subject else None
+                        )
+                        current_subject = ai_result['subject']
+                        current_body = ai_result['body']
+                
                 # Send email
                 with st.spinner(f"Sending email to {recipient}..."):
-                    response = send_email(current_inbox_id, recipient, subject, body)
+                    response = send_email(current_inbox_id, recipient, current_subject, current_body)
                     success_count += 1
+                    
+                    if require_approval:
+                        st.write(f"**Generated email for {recipient}:**")
+                        st.write(f"**Subject:** {current_subject}")
+                        st.write(f"**Body:**\n{current_body}")
+                        if not st.button(f"✅ Approve & Send to {recipient}", key=f"approve_{i}"):
+                            st.warning(f"Email to {recipient} not approved.")
+                            continue
                     
                     if len(recipients) == 1:
                         st.success(f"✅ Email sent to {recipient}! Inbox: {current_inbox_id}, Message: {response.message_id}")
