@@ -211,6 +211,7 @@ supersecret.txt
 */browser_data
 /email-retrieval/browser_data
 /email-retrieval/recruiter_data.json
+recruiters_data.json
 # /recruiter-email-scrapyer.py 
 # /key-retrieval.py 
 

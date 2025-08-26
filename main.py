@@ -6,23 +6,10 @@ import re
 
 st.set_page_config(page_title="Mail Agent", page_icon="📬", layout="wide")
 
-# Sidebar Navigation
-st.sidebar.title("📬 Mail Agent")
-page = st.sidebar.radio(
-    "Choose a feature:",
-    ["📧 Bulk Email Sender", "🔁 Email Spammer"]
-)
 
-if page == "🔁 Email Spammer":
-    # Import and run the spam functionality
-    import importlib.util
-    spec = importlib.util.spec_from_file_location("spam_emails", "pages/spam_emails.py")
-    spam_module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(spam_module)
-else:
-    # Default bulk email sender
-    st.title("📬 Mail Agent")
-    st.write("Welcome to the Mail Agent app! Manage your emails easily.")
+# Default bulk email sender
+st.title("📬 Mail Agent")
+st.write("Welcome to the Mail Agent app! Manage your emails easily.")
 
 # Send Email
 st.header("Send Email")
