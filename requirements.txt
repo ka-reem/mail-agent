@@ -2,3 +2,4 @@ streamlit
 agentmail
 python-dotenv
 google-generativeai
+playwright

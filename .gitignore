@@ -205,4 +205,12 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# 
 supersecret.txt
+*/browser_data
+/email-retrieval/browser_data
+/email-retrieval/recruiter_data.json
+# /recruiter-email-scrapyer.py 
+# /key-retrieval.py 
+
