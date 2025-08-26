@@ -16,7 +16,7 @@ st.header("Send Email")
 
 # Simple Settings
 st.subheader("Simple Settings")
-use_ai_customization = st.checkbox("Enable AI Customization", value=False, help="Uses Gemini AI to generate personalized emails based on recipient's email address")
+use_ai_customization = st.checkbox("Enable AI Customization Based off of Recipient's Email Address", value=False, help="Uses Gemini AI to generate personalized emails based on recipient's email address")
 require_approval = st.checkbox("Require Approval for Each Email", value=True, help="Review and approve each email before sending")
 
 # Advanced Settings
