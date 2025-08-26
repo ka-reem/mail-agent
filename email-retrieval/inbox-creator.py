@@ -15,23 +15,31 @@ if not api_key:
 
 client = AgentMail(api_key=api_key)
 
-# List of custom inbox names to create (trying more unique variations)
+# List of custom inbox names to create (unique variations)
 inbox_names = [
-    "myinfo",
-    "mysupport", 
-    "mysales",
-    "mycontact",
-    "myhelp",
-    "myadmin",
-    "mynoreply",
-    "mybilling",
-    "mymarketing",
-    "myhr",
-    "info2024",
-    "support2024",
-    "sales2024",
-    "contact2024",
-    "help2024"
+    "infobox",
+    "supportdesk",
+    "salesteam",
+    "contactus",
+    "helpdesk",
+    "adminpanel",
+    "noreplies",
+    "billpay",
+    "promo",
+    "orders",
+    "returns",
+    "newsletter",
+    "alerts",
+    "updates",
+    "careers",
+    "press",
+    "events",
+    "partners",
+    "privacy",
+    "accounts",
+    "customerservice",
+    "technicalsupport",
+    "webmaster",
 ]
 
 print("Creating custom inboxes...")
@@ -51,8 +59,9 @@ for name in inbox_names:
                 print(f"⚠️  Couldn't use username '{name}': {e}")
             
             # Fallback: create with random email but set display name
-            new_inbox = client.inboxes.create(display_name=name)
-            print(f"✅ Created Inbox: {new_inbox.inbox_id} (display name: '{name}')")
+            #no
+            # new_inbox = client.inboxes.create(display_name=name)
+            # print(f"✅ Created Inbox: {new_inbox.inbox_id} (display name: '{name}')")
             
     except Exception as e:
         print(f"❌ Failed to create inbox '{name}': {e}")
