@@ -37,7 +37,7 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
         name, company = extract_name_and_company(recipient_email)
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
-            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity that might interest you.\n\nBest regards"
+            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity that might interest you."
         }
     
     name, company = extract_name_and_company(recipient_email)
@@ -55,7 +55,15 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             Recipient: {name} at {company}
             Email: {recipient_email}
             
-            Generate a compelling subject line and enhance the email body. Replace placeholders like {{name}} and {{company}} appropriately.
+            CRITICAL INSTRUCTIONS:
+            - Generate a compelling subject line and enhance the email body
+            - Replace ALL placeholders like {{name}}, {{company}}, {{title}}, etc. with actual content
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], etc.
+            - If you don't have specific information, make reasonable professional assumptions
+            - Ensure the email is complete and ready to send without any editing needed
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," "Thank you," "[Your Name]," etc.
+            - The email should end with the main content, not a formal closing
+            - The user will add their own signature separately, so do not include any signature-like content
             {customization_note}
             
             Format your response as:
@@ -74,7 +82,15 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             - Company: {company}
             - Email: {recipient_email}
             
-            Generate both a compelling subject line and email body.
+            CRITICAL INSTRUCTIONS:
+            - Generate both a compelling subject line and email body
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], {{name}}, etc.
+            - Fill in ALL information with actual content - if you don't have specific details, make reasonable professional assumptions
+            - The email must be complete and ready to send without any editing needed
+            - Do not include any brackets, curly braces, or placeholder formatting
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," "Thank you," "[Your Name]," etc.
+            - The email should end with the main content, not a formal closing
+            - The user will add their own signature separately, so do not include any signature-like content
             {customization_note}
             
             Format your response as:
@@ -88,7 +104,16 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             ai_prompt = f"""
             Write a professional, personalized email to {name} who works at {company} ({recipient_email}).
             
-            Make it engaging and professional. Generate both subject and body.
+            CRITICAL INSTRUCTIONS:
+            - Make it engaging and professional
+            - Generate both subject and body
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], {{name}}, etc.
+            - Fill in ALL information with actual content - if you don't have specific details, make reasonable professional assumptions
+            - The email must be complete and ready to send without any editing needed
+            - Do not include any brackets, curly braces, or placeholder formatting
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," "Thank you," "[Your Name]," etc.
+            - The email should end with the main content, not a formal closing
+            - The user will add their own signature separately, so do not include any signature-like content
             {customization_note}
             
             Format your response as:
@@ -121,5 +146,5 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
         # Fallback content
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
-            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity.\n\nBest regards"
+            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity."
         }

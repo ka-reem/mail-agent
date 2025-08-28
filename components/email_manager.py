@@ -20,6 +20,9 @@ class EmailManager:
         """Generate email data for all recipients"""
         email_data = []
         
+        # Get signature from session state if available
+        signature = st.session_state.get('email_signature', '')
+        
         for i, recipient in enumerate(recipients):
             try:
                 if email_config['email_type'] == "regular":
@@ -37,6 +40,10 @@ class EmailManager:
                         )
                         current_subject = ai_result['subject']
                         current_body = ai_result['body']
+                        
+                        # Add signature to AI-generated email if signature exists
+                        if signature:
+                            current_body = f"{current_body}\n\n{signature}"
                 
                 email_data.append({
                     'recipient': recipient,

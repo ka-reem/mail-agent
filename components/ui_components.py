@@ -53,7 +53,7 @@ def display_inbox_settings() -> Tuple[bool, Optional[str]]:
     st.subheader("Inbox Settings")
     create_inbox_toggle = st.checkbox(
         "Create new inbox per email", 
-        value=True, 
+        value=False, 
         help="If disabled, you'll use one existing inbox for all emails"
     )
     
@@ -99,7 +99,44 @@ def display_regular_email_form() -> Tuple[str, str]:
         height=200
     )
     
-    return subject, body
+    # Email Signature Section for Regular Emails
+    st.markdown("---")
+    st.subheader("📝 Email Signature")
+    
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        include_signature = st.checkbox("Include signature", value=True, help="Add a signature to the end of your emails")
+    
+    if include_signature:
+        with col2:
+            st.write("")  # Spacer for alignment
+        
+        # Only custom signature option
+        signature = st.text_area(
+            "Custom Signature:",
+            placeholder="Best regards,\nJohn Smith\nSenior Developer\nTechCorp Inc.\njohn@techcorp.com\n(555) 123-4567",
+            height=100,
+            help="Write your custom email signature. This will be automatically added to the end of each email."
+        )
+        
+        if signature:
+            # Append signature to body if it exists
+            if body and signature:
+                body_with_signature = f"{body}\n\n{signature}"
+            elif signature:
+                body_with_signature = signature
+            else:
+                body_with_signature = body
+        else:
+            body_with_signature = body
+        
+        # Store signature in session state
+        st.session_state.email_signature = signature if signature else ""
+    else:
+        body_with_signature = body
+        st.session_state.email_signature = ""
+    
+    return subject, body_with_signature
 
 def display_regular_email_preview(subject: str, body: str, recipients: List[str]) -> None:
     """Display email preview for regular emails"""
@@ -114,42 +151,54 @@ def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[
     """Display AI email settings and return configuration"""
     st.subheader("AI Email Settings")
     
-    # AI Options in tabs
-    tab1, tab2, tab3 = st.tabs(["Template Mode", "Custom Prompt", "Auto Generate"])
+    # Custom Prompt Section (no tabs, direct input)
+    st.write("Tell AI what kind of email you want to send")
+    prompt = st.text_area(
+        "Custom Prompt:",
+        placeholder="Write a professional email inviting them to a networking event in San Francisco next month. Include specific details about the event date, location, and what attendees will gain from participating.",
+        height=120,
+        help="Describe the type of email you want AI to generate. Be specific about the tone, purpose, and any key information to include. The AI will generate complete emails without any placeholder text."
+    )
     
+    # Email Signature Section
+    st.markdown("---")
+    st.subheader("📝 Email Signature")
+    
+    col1, col2 = st.columns([1, 3])
+    with col1:
+        include_signature = st.checkbox("Include signature", value=True, help="Add a signature to the end of your emails")
+    
+    signature = ""
+    if include_signature:
+        with col2:
+            st.write("")  # Spacer for alignment
+        
+        # Only custom signature option
+        signature = st.text_area(
+            "Custom Signature:",
+            placeholder="Best regards,\nJohn Smith\nSenior Developer\nTechCorp Inc.\njohn@techcorp.com\n(555) 123-4567",
+            height=120,
+            help="Write your custom email signature. This will be automatically added to the end of each email."
+        )
+    
+    # Store signature in session state for use in email generation
+    if include_signature and signature:
+        st.session_state.email_signature = signature
+    else:
+        st.session_state.email_signature = ""
+    
+    # Initialize other variables as None since we're only using custom prompt
     template = None
-    prompt = None
     subject = None
     
-    with tab1:
-        st.write("Provide a template and AI will enhance it with personalized content")
-        template = st.text_area(
-            "Email Template:",
-            placeholder="Hi {name},\n\nI noticed your work at {company} and wanted to reach out about...\n\nBest regards,\nYour Name",
-            height=150
-        )
-        if template:
-            st.info("AI will replace {name} and {company} with personalized information")
-    
-    with tab2:
-        st.write("Tell AI what kind of email you want to send")
-        prompt = st.text_area(
-            "Custom Prompt:",
-            placeholder="Write a professional email inviting them to a networking event in San Francisco next month",
-            height=100
-        )
-    
-    with tab3:
-        st.write("Let AI generate a completely personalized email")
-        subject = st.text_input("Optional Subject Hint:", placeholder="Partnership opportunity")
-        st.info("AI will create unique emails for each recipient based on their email domain")
+    st.markdown("---")
     
     # AI Settings
     col1, col2 = st.columns(2)
     with col1:
         preview_emails = st.checkbox("Preview generated emails", value=True)
     with col2:
-        human_approval = st.checkbox("Require manual approval for each email", value=False, 
+        human_approval = st.checkbox("Require manual approval for each email", value=True, 
                                    help="Review and approve each email individually before sending")
     
     # Advanced AI Settings

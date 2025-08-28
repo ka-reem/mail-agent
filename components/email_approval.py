@@ -20,16 +20,79 @@ class EmailApprovalManager:
             
         st.subheader("AI Generated Email Previews")
         
+        # Add bulk select controls if human approval is required
+        if human_approval:
+            self._display_bulk_approval_controls(email_data)
+        
         for i, email_info in enumerate(email_data):
             with st.expander(f"Email for {email_info['recipient']}", expanded=human_approval):
-                st.write(f"**Subject:** {email_info['subject']}")
-                st.write(f"**Body:**")
-                st.write(email_info['body'])
-                
                 if human_approval and not email_info.get('sent', False):
+                    # Editable email content
+                    st.write("✏️ **Edit Email Content:**")
+                    
+                    # Editable subject
+                    edited_subject = st.text_input(
+                        "Subject:",
+                        value=email_info['subject'],
+                        key=f"subject_{i}_{email_info['recipient']}"
+                    )
+                    
+                    # Editable body
+                    edited_body = st.text_area(
+                        "Email Body:",
+                        value=email_info['body'],
+                        height=200,
+                        key=f"body_{i}_{email_info['recipient']}"
+                    )
+                    
+                    # Update the email data if content was edited
+                    if edited_subject != email_info['subject'] or edited_body != email_info['body']:
+                        st.session_state.email_data[i]['subject'] = edited_subject
+                        st.session_state.email_data[i]['body'] = edited_body
+                    
+                    st.markdown("---")
                     self._display_approval_controls(i, email_info)
-                elif email_info.get('sent', False):
+                else:
+                    # Read-only preview
+                    st.write(f"**Subject:** {email_info['subject']}")
+                    st.write(f"**Body:**")
+                    st.write(email_info['body'])
+                    
+                if email_info.get('sent', False):
                     st.success(f"✅ Email already sent to {email_info['recipient']}")
+    
+    def _display_bulk_approval_controls(self, email_data: List[Dict]) -> None:
+        """Display bulk approval controls"""
+        st.markdown("---")
+        
+        col1, col2, col3 = st.columns([1, 1, 2])
+        
+        with col1:
+            select_all = st.checkbox("📧 Select All", key="select_all_emails")
+        
+        with col2:
+            if st.button("Clear All", key="clear_all_emails"):
+                # Clear all approvals
+                for i, email_info in enumerate(email_data):
+                    if not email_info.get('sent', False):
+                        st.session_state.email_data[i]['approved'] = False
+                        # Clear individual checkboxes
+                        approval_key = f"approve_{i}_{email_info['recipient']}"
+                        if approval_key in st.session_state:
+                            st.session_state[approval_key] = False
+                st.session_state.select_all_emails = False
+                st.rerun()
+        
+        # Handle select all functionality
+        if select_all:
+            for i, email_info in enumerate(email_data):
+                if not email_info.get('sent', False):
+                    st.session_state.email_data[i]['approved'] = True
+                    # Update individual checkboxes
+                    approval_key = f"approve_{i}_{email_info['recipient']}"
+                    st.session_state[approval_key] = True
+        
+        st.markdown("---")
     
     def _display_approval_controls(self, index: int, email_info: Dict) -> None:
         """Display approval controls for individual email"""
