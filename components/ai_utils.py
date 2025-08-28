@@ -29,7 +29,7 @@ def extract_name_and_company(email):
     except:
         return "there", "your company"
 
-def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None):
+def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False):
     """Generate personalized email using Gemini AI"""
     
     if not GEMINI_API_KEY:
@@ -45,6 +45,8 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
     try:
         if template:
             # Use template with AI enhancement
+            customization_note = "\n\nIMPORTANT: Generate VERY similar content for consistency across recipients. Only personalize the name and company." if not customize_per_recipient else "\n\nGenerate highly customized content based on the recipient's company and background."
+            
             ai_prompt = f"""
             You are writing a professional email. Use this template but make it more engaging and personalized:
             
@@ -54,6 +56,7 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             Email: {recipient_email}
             
             Generate a compelling subject line and enhance the email body. Replace placeholders like {{name}} and {{company}} appropriately.
+            {customization_note}
             
             Format your response as:
             SUBJECT: [subject line here]
@@ -61,6 +64,8 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             """
         elif prompt:
             # Use custom prompt
+            customization_note = "\n\nIMPORTANT: Keep the core message consistent across all recipients. Only personalize names and companies." if not customize_per_recipient else "\n\nCreate unique, highly personalized content based on the recipient's specific company and industry."
+            
             ai_prompt = f"""
             {prompt}
             
@@ -70,6 +75,7 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             - Email: {recipient_email}
             
             Generate both a compelling subject line and email body.
+            {customization_note}
             
             Format your response as:
             SUBJECT: [subject line here]
@@ -77,10 +83,13 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             """
         else:
             # Default AI generation
+            customization_note = "Keep the message professional and consistent. Only personalize with their name and company." if not customize_per_recipient else "Research typical companies in their domain and create highly specific, customized content."
+            
             ai_prompt = f"""
             Write a professional, personalized email to {name} who works at {company} ({recipient_email}).
             
             Make it engaging and professional. Generate both subject and body.
+            {customization_note}
             
             Format your response as:
             SUBJECT: [subject line here]
