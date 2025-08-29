@@ -29,18 +29,30 @@ def extract_name_and_company(email):
     except:
         return "there", "your company"
 
-def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False):
+def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False, contact_context=None):
     """Generate personalized email using Gemini AI"""
     
     if not GEMINI_API_KEY:
         # Fallback if no Gemini API key
-        name, company = extract_name_and_company(recipient_email)
+        if contact_context:
+            name = contact_context.get('name', 'there')
+            company = contact_context.get('company', 'your company')
+        else:
+            name, company = extract_name_and_company(recipient_email)
+        
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
             'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity that might interest you."
         }
     
-    name, company = extract_name_and_company(recipient_email)
+    # Use contact context if provided, otherwise extract from email
+    if contact_context:
+        name = contact_context.get('name', 'there')
+        company = contact_context.get('company', 'your company')
+        title = contact_context.get('title', 'Professional')
+    else:
+        name, company = extract_name_and_company(recipient_email)
+        title = "Professional"
     
     try:
         if template:
@@ -52,8 +64,12 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             
             Template: {template}
             
-            Recipient: {name} at {company}
-            Email: {recipient_email}
+            Recipient Details:
+            - Name: {name}
+            - Company: {company}
+            - Title: {title}
+            - Email: {recipient_email}
+            {f"- Additional Context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
             CRITICAL INSTRUCTIONS:
             - Generate a compelling subject line and enhance the email body
@@ -77,10 +93,12 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             ai_prompt = f"""
             {prompt}
             
-            Recipient details:
+            Recipient Details:
             - Name: {name}
             - Company: {company}
+            - Title: {title}
             - Email: {recipient_email}
+            {f"- Additional Context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
             CRITICAL INSTRUCTIONS:
             - Generate both a compelling subject line and email body
@@ -102,7 +120,8 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             customization_note = "Keep the message professional and consistent. Only personalize with their name and company." if not customize_per_recipient else "Research typical companies in their domain and create highly specific, customized content."
             
             ai_prompt = f"""
-            Write a professional, personalized email to {name} who works at {company} ({recipient_email}).
+            Write a professional, personalized email to {name} who works at {company} as a {title} ({recipient_email}).
+            {f"Additional context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
             CRITICAL INSTRUCTIONS:
             - Make it engaging and professional
@@ -144,6 +163,12 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
     except Exception as e:
         print(f"Gemini API error: {e}")
         # Fallback content
+        if contact_context:
+            name = contact_context.get('name', 'there')
+            company = contact_context.get('company', 'your company')
+        else:
+            name, company = extract_name_and_company(recipient_email)
+            
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
             'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity."

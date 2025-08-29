@@ -35,7 +35,8 @@ def display_recipients_input() -> List[str]:
     email_text = st.text_area(
         "Enter recipient emails (one per line or comma-separated):",
         placeholder="john@company1.com\nmary@company2.com\nbob@startup.io\n\nOr: john@company1.com, mary@company2.com",
-        height=120
+        height=120,
+        key="manual_recipients_input"
     )
     
     recipients = extract_emails_from_text(email_text)
