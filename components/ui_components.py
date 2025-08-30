@@ -152,6 +152,22 @@ def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[
     """Display AI email settings and return configuration"""
     st.subheader("AI Email Settings")
     
+    # Sender Information Section
+    st.markdown("---")
+    st.subheader("📝 About You (Sender Information)")
+    sender_info = st.text_area(
+        "Add information about yourself here:",
+        placeholder="I'm a Computer Science student at UC Berkeley graduating in May 2025. I have internship experience at tech companies including Google and Microsoft, where I worked on backend systems and machine learning projects. I'm passionate about software engineering and looking for full-time opportunities in tech.",
+        height=100,
+        key="sender_info_input",
+        help="This information will be used by AI to personalize emails from your perspective. Include your background, experience, education, and any relevant details."
+    )
+    
+    # Store sender info in session state
+    st.session_state.sender_info = sender_info if sender_info else ""
+    
+    st.markdown("---")
+    
     # Custom Prompt Section (no tabs, direct input)
     st.write("Tell AI what kind of email you want to send")
     prompt = st.text_area(

@@ -40,13 +40,17 @@ class EmailManager:
                         # Get contact context if available
                         contact_context = contact_mapping.get(recipient, None)
                         
+                        # Get sender info from session state
+                        sender_info = st.session_state.get('sender_info', '')
+                        
                         ai_result = generate_personalized_email(
                             recipient_email=recipient,
                             template=email_config.get('template'),
                             prompt=email_config.get('prompt'),
                             subject=email_config.get('subject'),
                             customize_per_recipient=email_config.get('customize_per_recipient', False),
-                            contact_context=contact_context
+                            contact_context=contact_context,
+                            sender_info=sender_info
                         )
                         current_subject = ai_result['subject']
                         current_body = ai_result['body']
