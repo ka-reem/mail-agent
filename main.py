@@ -85,6 +85,7 @@ st.markdown("---")
 
 # Send Button and Email Processing
 if display_send_button(st.session_state.email_type, recipients, subject, body, human_approval, preview_emails):
+
     if not recipients:
         st.error("Please add at least one recipient")
     elif st.session_state.email_type == "regular" and (not subject or not body):
