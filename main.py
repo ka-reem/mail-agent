@@ -12,6 +12,7 @@ from components.ui_components import (
 )
 from components.email_manager import EmailManager, create_email_config
 from components.email_approval import EmailApprovalManager, display_auto_send_workflow
+from components.json_email_processor import display_json_email_input, create_recipients_from_json
 
 # Page configuration
 st.set_page_config(page_title=APP_TITLE, page_icon=APP_ICON, layout="wide")
@@ -33,6 +34,29 @@ st.markdown("---")
 
 # Recipients Section
 recipients = display_recipients_input()
+
+# JSON Recipients Section
+json_contacts = display_json_email_input()
+if json_contacts:
+    json_recipients = create_recipients_from_json(json_contacts)
+    if json_recipients:
+        # Merge or replace recipients based on user choice
+        if recipients:
+            merge_option = st.radio(
+                "Recipients detected from both sources:",
+                ["Use JSON recipients only", "Combine JSON + manual recipients"],
+                key="recipient_merge_option"
+            )
+            if merge_option == "Use JSON recipients only":
+                recipients = json_recipients
+            else:
+                recipients = list(set(recipients + json_recipients))  # Remove duplicates
+        else:
+            recipients = json_recipients
+        
+        st.success(f"Using {len(recipients)} recipients total")
+else:
+    json_contacts = None
 
 st.markdown("---")
 
@@ -82,7 +106,7 @@ if display_send_button(st.session_state.email_type, recipients, subject, body, h
             )
             
             # Generate email data
-            email_data = email_manager.generate_email_data(recipients, email_config)
+            email_data = email_manager.generate_email_data(recipients, email_config, json_contacts)
             set_email_data(email_data)
             st.rerun()
 

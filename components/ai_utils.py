@@ -29,18 +29,66 @@ def extract_name_and_company(email):
     except:
         return "there", "your company"
 
-def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False):
+def clean_placeholder_content(content):
+    """Remove or replace placeholder content with generic professional content"""
+    import re
+    
+    # Common placeholder patterns to replace
+    placeholder_patterns = [
+        (r'\[Your [^\]]+\]', ''),
+        (r'\[your [^\]]+\]', ''),
+        (r'\{[^}]+\}', ''),
+        (r'your major here', 'Computer Science'),
+        (r'put information about yourself here', 'I am a motivated professional with relevant experience'),
+        (r'insert details here', 'relevant details'),
+        (r'mention your experience', 'my experience'),
+        (r'add your qualifications', 'my qualifications'),
+        (r'insert your background', 'my background'),
+        (r'describe your skills', 'my skills'),
+        (r'your experience here', 'relevant professional experience'),
+        (r'your background here', 'a strong background in technology'),
+        (r'your qualifications here', 'relevant qualifications'),
+        (r'your skills here', 'strong technical skills'),
+    ]
+    
+    # Apply replacements (case insensitive)
+    for pattern, replacement in placeholder_patterns:
+        content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
+    
+    # Clean up any remaining brackets or braces that might contain placeholders
+    content = re.sub(r'\[[^\]]*\]', '', content)
+    content = re.sub(r'\{[^}]*\}', '', content)
+    
+    # Clean up extra spaces and line breaks
+    content = re.sub(r'\s+', ' ', content)
+    content = re.sub(r'\n\s*\n', '\n\n', content)
+    
+    return content.strip()
+
+def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False, contact_context=None, sender_info=None):
     """Generate personalized email using Gemini AI"""
     
     if not GEMINI_API_KEY:
         # Fallback if no Gemini API key
-        name, company = extract_name_and_company(recipient_email)
+        if contact_context:
+            name = contact_context.get('name', 'there')
+            company = contact_context.get('company', 'your company')
+        else:
+            name, company = extract_name_and_company(recipient_email)
+        
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
             'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity that might interest you."
         }
     
-    name, company = extract_name_and_company(recipient_email)
+    # Use contact context if provided, otherwise extract from email
+    if contact_context:
+        name = contact_context.get('name', 'there')
+        company = contact_context.get('company', 'your company')
+        title = contact_context.get('title', 'Professional')
+    else:
+        name, company = extract_name_and_company(recipient_email)
+        title = "Professional"
     
     try:
         if template:
@@ -52,18 +100,26 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             
             Template: {template}
             
-            Recipient: {name} at {company}
-            Email: {recipient_email}
+            Recipient Details:
+            - Name: {name}
+            - Company: {company}
+            - Title: {title}
+            - Email: {recipient_email}
+            {f"- Additional Context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
-            CRITICAL INSTRUCTIONS:
+            Sender Information (USE THIS FOR ANY PERSONAL DETAILS):
+            {sender_info if sender_info else "Professional with relevant experience seeking opportunities"}
+            
+            CRITICAL INSTRUCTIONS - READ CAREFULLY:
             - Generate a compelling subject line and enhance the email body
             - Replace ALL placeholders like {{name}}, {{company}}, {{title}}, etc. with actual content
-            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], etc.
-            - If you don't have specific information, make reasonable professional assumptions
-            - Ensure the email is complete and ready to send without any editing needed
-            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," "Thank you," "[Your Name]," etc.
-            - The email should end with the main content, not a formal closing
-            - The user will add their own signature separately, so do not include any signature-like content
+            - When you need information about the sender (like name, background, experience, education), ONLY use the "Sender Information" provided above
+            - NEVER make up names, majors, companies, or personal details about the sender
+            - If sender information is not provided for something specific, write in a general professional manner without specific personal details
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], "your major here", etc.
+            - The email must be 100% complete and ready to send without any editing needed
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," etc.
+            - The user will add their own signature separately
             {customization_note}
             
             Format your response as:
@@ -77,20 +133,25 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             ai_prompt = f"""
             {prompt}
             
-            Recipient details:
+            Recipient Details:
             - Name: {name}
             - Company: {company}
+            - Title: {title}
             - Email: {recipient_email}
+            {f"- Additional Context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
-            CRITICAL INSTRUCTIONS:
+            Sender Information (USE THIS FOR ANY PERSONAL DETAILS):
+            {sender_info if sender_info else "Professional with relevant experience seeking opportunities"}
+            
+            CRITICAL INSTRUCTIONS - READ CAREFULLY:
             - Generate both a compelling subject line and email body
-            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], {{name}}, etc.
-            - Fill in ALL information with actual content - if you don't have specific details, make reasonable professional assumptions
-            - The email must be complete and ready to send without any editing needed
-            - Do not include any brackets, curly braces, or placeholder formatting
-            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," "Thank you," "[Your Name]," etc.
-            - The email should end with the main content, not a formal closing
-            - The user will add their own signature separately, so do not include any signature-like content
+            - When you need information about the sender (like name, background, experience, education), ONLY use the "Sender Information" provided above
+            - NEVER make up names, majors, companies, or personal details about the sender
+            - If sender information is not provided for something specific, write in a general professional manner without specific personal details
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], "your major here", etc.
+            - The email must be 100% complete and ready to send without any editing needed
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," etc.
+            - The user will add their own signature separately
             {customization_note}
             
             Format your response as:
@@ -102,18 +163,22 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             customization_note = "Keep the message professional and consistent. Only personalize with their name and company." if not customize_per_recipient else "Research typical companies in their domain and create highly specific, customized content."
             
             ai_prompt = f"""
-            Write a professional, personalized email to {name} who works at {company} ({recipient_email}).
+            Write a professional, personalized email to {name} who works at {company} as a {title} ({recipient_email}).
+            {f"Additional context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
-            CRITICAL INSTRUCTIONS:
+            Sender Information (USE THIS FOR ANY PERSONAL DETAILS):
+            {sender_info if sender_info else "Professional with relevant experience seeking opportunities"}
+            
+            CRITICAL INSTRUCTIONS - READ CAREFULLY:
             - Make it engaging and professional
             - Generate both subject and body
-            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], {{name}}, etc.
-            - Fill in ALL information with actual content - if you don't have specific details, make reasonable professional assumptions
-            - The email must be complete and ready to send without any editing needed
-            - Do not include any brackets, curly braces, or placeholder formatting
-            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," "Thank you," "[Your Name]," etc.
-            - The email should end with the main content, not a formal closing
-            - The user will add their own signature separately, so do not include any signature-like content
+            - When you need information about the sender (like name, background, experience, education), ONLY use the "Sender Information" provided above
+            - NEVER make up names, majors, companies, or personal details about the sender
+            - If sender information is not provided for something specific, write in a general professional manner without specific personal details
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], "your major here", etc.
+            - The email must be 100% complete and ready to send without any editing needed
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," etc.
+            - The user will add their own signature separately
             {customization_note}
             
             Format your response as:
@@ -123,6 +188,9 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
         
         response = model.generate_content(ai_prompt)
         content = response.text
+        
+        # Post-process to remove any remaining placeholders
+        content = clean_placeholder_content(content)
         
         # Parse the response
         if "SUBJECT:" in content and "BODY:" in content:
@@ -144,6 +212,12 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
     except Exception as e:
         print(f"Gemini API error: {e}")
         # Fallback content
+        if contact_context:
+            name = contact_context.get('name', 'there')
+            company = contact_context.get('company', 'your company')
+        else:
+            name, company = extract_name_and_company(recipient_email)
+            
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
             'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity."

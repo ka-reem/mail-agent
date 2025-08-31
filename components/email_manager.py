@@ -16,12 +16,18 @@ class EmailManager:
         self.create_inbox_toggle = create_inbox_toggle
         self.selected_inbox = selected_inbox
     
-    def generate_email_data(self, recipients: List[str], email_config: Dict) -> List[Dict]:
+    def generate_email_data(self, recipients: List[str], email_config: Dict, json_contacts: List[Dict] = None) -> List[Dict]:
         """Generate email data for all recipients"""
         email_data = []
         
         # Get signature from session state if available
         signature = st.session_state.get('email_signature', '')
+        
+        # Create a mapping from email to contact info if JSON contacts provided
+        contact_mapping = {}
+        if json_contacts:
+            for contact in json_contacts:
+                contact_mapping[contact['email']] = contact
         
         for i, recipient in enumerate(recipients):
             try:
@@ -31,12 +37,20 @@ class EmailManager:
                 else:
                     # AI Email generation
                     with st.spinner(f"Generating personalized email for {recipient}..."):
+                        # Get contact context if available
+                        contact_context = contact_mapping.get(recipient, None)
+                        
+                        # Get sender info from session state
+                        sender_info = st.session_state.get('sender_info', '')
+                        
                         ai_result = generate_personalized_email(
                             recipient_email=recipient,
                             template=email_config.get('template'),
                             prompt=email_config.get('prompt'),
                             subject=email_config.get('subject'),
-                            customize_per_recipient=email_config.get('customize_per_recipient', False)
+                            customize_per_recipient=email_config.get('customize_per_recipient', False),
+                            contact_context=contact_context,
+                            sender_info=sender_info
                         )
                         current_subject = ai_result['subject']
                         current_body = ai_result['body']

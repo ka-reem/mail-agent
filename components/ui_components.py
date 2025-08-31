@@ -35,7 +35,8 @@ def display_recipients_input() -> List[str]:
     email_text = st.text_area(
         "Enter recipient emails (one per line or comma-separated):",
         placeholder="john@company1.com\nmary@company2.com\nbob@startup.io\n\nOr: john@company1.com, mary@company2.com",
-        height=120
+        height=120,
+        key="manual_recipients_input"
     )
     
     recipients = extract_emails_from_text(email_text)
@@ -150,6 +151,22 @@ def display_regular_email_preview(subject: str, body: str, recipients: List[str]
 def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[str], bool, bool, bool]:
     """Display AI email settings and return configuration"""
     st.subheader("AI Email Settings")
+    
+    # Sender Information Section
+    st.markdown("---")
+    st.subheader("📝 About You (Sender Information)")
+    sender_info = st.text_area(
+        "Add information about yourself here:",
+        placeholder="I'm a Computer Science student at UC Berkeley graduating in May 2025. I have internship experience at tech companies including Google and Microsoft, where I worked on backend systems and machine learning projects. I'm passionate about software engineering and looking for full-time opportunities in tech.",
+        height=100,
+        key="sender_info_input",
+        help="This information will be used by AI to personalize emails from your perspective. Include your background, experience, education, and any relevant details."
+    )
+    
+    # Store sender info in session state
+    st.session_state.sender_info = sender_info if sender_info else ""
+    
+    st.markdown("---")
     
     # Custom Prompt Section (no tabs, direct input)
     st.write("Tell AI what kind of email you want to send")

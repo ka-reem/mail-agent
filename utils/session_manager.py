@@ -11,6 +11,12 @@ def init_session_state():
     
     if 'email_data_generated' not in st.session_state:
         st.session_state.email_data_generated = False
+    
+    if 'email_signature' not in st.session_state:
+        st.session_state.email_signature = ""
+    
+    if 'sender_info' not in st.session_state:
+        st.session_state.sender_info = ""
 
 def reset_email_data():
     """Reset email generation data"""
