@@ -13,14 +13,14 @@ def display_email_type_selector() -> None:
     col1, col2 = st.columns(2)
     
     with col1:
-        regular_selected = st.button("Regular Email", key="regular_btn", use_container_width=True)
-        if regular_selected:
-            st.session_state.email_type = "regular"
-    
-    with col2:
         ai_selected = st.button("AI-Generated Email", key="ai_btn", use_container_width=True)
         if ai_selected:
             st.session_state.email_type = "ai"
+    
+    with col2:
+        regular_selected = st.button("Regular Email", key="regular_btn", use_container_width=True)
+        if regular_selected:
+            st.session_state.email_type = "regular"
 
 def display_email_type_info(email_type: str) -> None:
     """Display information about current email type"""
@@ -55,7 +55,7 @@ def display_inbox_settings() -> Tuple[bool, Optional[str]]:
     create_inbox_toggle = st.checkbox(
         "Create new inbox per email", 
         value=False, 
-        help="If disabled, you'll use one existing inbox for all emails"
+        help="Creates a new unique separate inbox for each outgoing email, ensuring messages are always delivered without bounces."
     )
     
     selected_inbox = None

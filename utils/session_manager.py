@@ -7,7 +7,7 @@ import streamlit as st
 def init_session_state():
     """Initialize all session state variables with default values"""
     if 'email_type' not in st.session_state:
-        st.session_state.email_type = "regular"
+        st.session_state.email_type = "ai"
     
     if 'email_data_generated' not in st.session_state:
         st.session_state.email_data_generated = False
