@@ -59,7 +59,7 @@ class EmailApprovalManager:
                     st.write(email_info['body'])
                     
                 if email_info.get('sent', False):
-                    st.success(f"✅ Email already sent to {email_info['recipient']}")
+                    st.success(f"Email sent to {email_info['recipient']}")
     
     def _display_bulk_approval_controls(self, email_data: List[Dict]) -> None:
         """Display bulk approval controls"""
@@ -70,18 +70,18 @@ class EmailApprovalManager:
         with col1:
             select_all = st.checkbox("📧 Select All", key="select_all_emails")
         
-        with col2:
-            if st.button("Clear All", key="clear_all_emails"):
-                # Clear all approvals
-                for i, email_info in enumerate(email_data):
-                    if not email_info.get('sent', False):
-                        st.session_state.email_data[i]['approved'] = False
-                        # Clear individual checkboxes
-                        approval_key = f"approve_{i}_{email_info['recipient']}"
-                        if approval_key in st.session_state:
-                            st.session_state[approval_key] = False
-                st.session_state.select_all_emails = False
-                st.rerun()
+        # with col2:
+        #     if st.button("Clear All", key="clear_all_emails"):
+        #         # Clear all approvals
+        #         for i, email_info in enumerate(email_data):
+        #             if not email_info.get('sent', False):
+        #                 st.session_state.email_data[i]['approved'] = False
+        #                 # Clear individual checkboxes
+        #                 approval_key = f"approve_{i}_{email_info['recipient']}"
+        #                 if approval_key in st.session_state:
+        #                     st.session_state[approval_key] = False
+        #         st.session_state.select_all_emails = False
+        #         st.rerun()
         
         # Handle select all functionality
         if select_all:
@@ -99,7 +99,7 @@ class EmailApprovalManager:
         # Individual approval checkbox
         approval_key = f"approve_{index}_{email_info['recipient']}"
         approved = st.checkbox(
-            f"✅ Approve this email for {email_info['recipient']}", 
+            f"Approve this email for {email_info['recipient']}", 
             key=approval_key,
             value=email_info.get('approved', False)
         )
@@ -115,7 +115,7 @@ class EmailApprovalManager:
         """Send individual email and update status"""
         with st.spinner(f"Sending to {email_info['recipient']}..."):
             if self.email_manager.send_single_email(email_info):
-                st.success(f"✅ Email sent successfully to {email_info['recipient']}!")
+                st.success(f"Email sent successfully to {email_info['recipient']}!")
                 mark_email_sent(index)
                 st.rerun()
     
@@ -129,7 +129,7 @@ class EmailApprovalManager:
                         use_container_width=True):
                 self._send_bulk_emails(approved_emails, email_data)
         else:
-            st.info("No emails approved for sending. Please approve emails above to enable bulk sending.")
+            st.info("No emails approved for sending. Please approve emails above.")
     
     def _send_bulk_emails(self, approved_emails: List[Dict], all_email_data: List[Dict]) -> None:
         """Send all approved emails in bulk"""

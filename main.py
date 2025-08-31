@@ -21,7 +21,7 @@ st.set_page_config(page_title=APP_TITLE, page_icon=APP_ICON, layout="wide")
 init_session_state()
 
 # Main header
-st.title(APP_TITLE)
+st.title("AI Email Cannon 9000")
 st.write(APP_DESCRIPTION)
 
 # Email Type Selection

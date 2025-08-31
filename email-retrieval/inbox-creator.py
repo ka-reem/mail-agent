@@ -49,19 +49,19 @@ for name in inbox_names:
         # Try to create inbox with custom username (this creates name@agentmail.to)
         try:
             new_inbox = client.inboxes.create(username=name)
-            print(f"✅ Created Inbox: {name}@agentmail.to")
+            print(f"Created Inbox: {name}@agentmail.to")
         except Exception as e:
             # If username is taken or invalid, fall back to random email with display name
             error_msg = str(e).lower()
             if "already exists" in error_msg or "taken" in error_msg or "unavailable" in error_msg:
-                print(f"⚠️  Username '{name}' is already taken, creating with random email...")
+                print(f" Username '{name}' is already taken, creating with random email...")
             else:
-                print(f"⚠️  Couldn't use username '{name}': {e}")
+                print(f" Couldn't use username '{name}': {e}")
             
             # Fallback: create with random email but set display name
             #no
             # new_inbox = client.inboxes.create(display_name=name)
-            # print(f"✅ Created Inbox: {new_inbox.inbox_id} (display name: '{name}')")
+            # print(f"Created Inbox: {new_inbox.inbox_id} (display name: '{name}')")
             
     except Exception as e:
         print(f"❌ Failed to create inbox '{name}': {e}")

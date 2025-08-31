@@ -66,46 +66,24 @@ def is_valid_email(email: str) -> bool:
 
 def display_json_email_input() -> Optional[List[Dict[str, str]]]:
     """Display JSON input interface and return extracted contact data"""
-    with st.expander("📂 Import Recipients from JSON", expanded=False):
-        st.write("Upload or paste JSON data with recipient information. The system will automatically detect fields like name, email, company, and title.")
-        
-        # Input methods
-        input_method = st.radio(
-            "Choose input method:",
-            ["Paste JSON", "Upload JSON File"],
-            key="json_input_method"
-        )
-        
+    with st.expander("Import Recipients from JSON (Recommended)", expanded=False):
+        st.write("Paste your JSON with recipient info. Make sure to include \"email\": \"their@email.com\". Other fields like name, title, or job will be used automatically. Well-labeled data works better than dumping everything into \"info\".")
+
         json_data = None
         
-        if input_method == "Paste JSON":
-            json_text = st.text_area(
-                "Paste your JSON data here:",
-                placeholder='[\n  {\n    "name": "John Doe",\n    "company": "TechCorp",\n    "title": "Engineer",\n    "email": "john@techcorp.com"\n  }\n]',
-                height=200,
-                key="json_paste_input"
-            )
-            
-            if json_text.strip():
-                try:
-                    json_data = json.loads(json_text)
-                except json.JSONDecodeError as e:
-                    st.error(f"Invalid JSON format: {str(e)}")
-                    return None
+        json_text = st.text_area(
+            "Paste your JSON data here:",
+            placeholder='[\n  {\n    "name": "John Doe",\n    "company": "TechCorp",\n    "title": "Senior Engineer",\n    "email": "john@techcorp.com"\n  },\n  {\n    "name": "Sarah Johnson",\n    "company": "StartupXYZ",\n    "title": "Product Manager",\n    "email": "sarah@startupxyz.io"\n  }\n]',
+            height=200,
+            key="json_paste_input"
+        )
         
-        else:  # Upload JSON File
-            uploaded_file = st.file_uploader(
-                "Upload JSON file",
-                type=['json'],
-                key="json_file_uploader"
-            )
-            
-            if uploaded_file is not None:
-                try:
-                    json_data = json.load(uploaded_file)
-                except json.JSONDecodeError as e:
-                    st.error(f"Invalid JSON file: {str(e)}")
-                    return None
+        if json_text.strip():
+            try:
+                json_data = json.loads(json_text)
+            except json.JSONDecodeError as e:
+                st.error(f"Invalid JSON format: {str(e)}")
+                return None
         
         if json_data:
             # Ensure it's a list
@@ -117,7 +95,7 @@ def display_json_email_input() -> Optional[List[Dict[str, str]]]:
             contacts = extract_contact_info_from_json(json_data)
             
             if contacts:
-                st.success(f"✅ Successfully extracted {len(contacts)} valid contacts from JSON")
+                st.success(f"Successfully extracted {len(contacts)} valid contacts from JSON")
                 
                 # Show preview without nested expander
                 st.write("**Preview of extracted data:**")

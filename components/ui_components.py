@@ -13,14 +13,14 @@ def display_email_type_selector() -> None:
     col1, col2 = st.columns(2)
     
     with col1:
-        regular_selected = st.button("Regular Email", key="regular_btn", use_container_width=True)
-        if regular_selected:
-            st.session_state.email_type = "regular"
-    
-    with col2:
         ai_selected = st.button("AI-Generated Email", key="ai_btn", use_container_width=True)
         if ai_selected:
             st.session_state.email_type = "ai"
+    
+    with col2:
+        regular_selected = st.button("Regular Email", key="regular_btn", use_container_width=True)
+        if regular_selected:
+            st.session_state.email_type = "regular"
 
 def display_email_type_info(email_type: str) -> None:
     """Display information about current email type"""
@@ -55,7 +55,7 @@ def display_inbox_settings() -> Tuple[bool, Optional[str]]:
     create_inbox_toggle = st.checkbox(
         "Create new inbox per email", 
         value=False, 
-        help="If disabled, you'll use one existing inbox for all emails"
+        help="Creates a new unique separate inbox for each outgoing email, ensuring messages are always delivered without bounces."
     )
     
     selected_inbox = None
@@ -102,7 +102,7 @@ def display_regular_email_form() -> Tuple[str, str]:
     
     # Email Signature Section for Regular Emails
     st.markdown("---")
-    st.subheader("📝 Email Signature")
+    st.subheader("Email Signature")
     
     col1, col2 = st.columns([1, 3])
     with col1:
@@ -149,15 +149,15 @@ def display_regular_email_preview(subject: str, body: str, recipients: List[str]
             st.write(f"**Will be sent to:** {len(recipients)} recipients")
 
 def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[str], bool, bool, bool]:
-    """Display AI email settings and return configuration"""
-    st.subheader("AI Email Settings")
+    # """Display AI email settings and return configuration"""
+    # st.subheader("AI Email Settings")
     
     # Sender Information Section
-    st.markdown("---")
-    st.subheader("📝 About You (Sender Information)")
+    # st.markdown("---")
+    st.subheader("About You (Sender Information)")
     sender_info = st.text_area(
         "Add information about yourself here:",
-        placeholder="I'm a Computer Science student at UC Berkeley graduating in May 2025. I have internship experience at tech companies including Google and Microsoft, where I worked on backend systems and machine learning projects. I'm passionate about software engineering and looking for full-time opportunities in tech.",
+        placeholder="I'm a Computer Science student at SFSU graduating in May 2030. I have internship experience at tech companies including Google and Microsoft, where I worked on backend systems and machine learning projects.",
         height=100,
         key="sender_info_input",
         help="This information will be used by AI to personalize emails from your perspective. Include your background, experience, education, and any relevant details."
@@ -179,11 +179,11 @@ def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[
     
     # Email Signature Section
     st.markdown("---")
-    st.subheader("📝 Email Signature")
+    st.subheader("Email Signature")
     
     col1, col2 = st.columns([1, 3])
     with col1:
-        include_signature = st.checkbox("Include signature", value=True, help="Add a signature to the end of your emails")
+        include_signature = st.checkbox("Include signature", value=True, help="Add a signature to the end of your emails—one will not be added by default.")
     
     signature = ""
     if include_signature:
@@ -213,7 +213,8 @@ def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[
     # AI Settings
     col1, col2 = st.columns(2)
     with col1:
-        preview_emails = st.checkbox("Preview generated emails", value=True)
+        preview_emails = st.checkbox("Preview generated emails", value=True, 
+                                   help="Show all generated emails and lets you customize their content (should not be unchecked)")
     with col2:
         human_approval = st.checkbox("Require manual approval for each email", value=True, 
                                    help="Review and approve each email individually before sending")
@@ -226,7 +227,7 @@ def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[
             help="This will generate completely different messages for each recipient based on their email domain. May result in inconsistent messaging and longer generation time."
         )
         if customize_per_recipient:
-            st.warning("⚠️ This option may create inconsistent messaging across recipients and take longer to generate. Use with caution for professional communications.")
+            st.warning("This option may create inconsistent messaging across recipients and take longer to generate. Use with caution for professional communications.")
         else:
             st.info("💡 Recommended: Keep this disabled for consistent, professional messaging across all recipients.")
     

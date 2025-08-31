@@ -90,7 +90,7 @@ async def scrape_recruiters(load_more_clicks=25):
                 await page.wait_for_load_state("domcontentloaded", timeout=3000)  # Just 3 seconds
                 print("✓ Page loaded successfully")
             except Exception as load_error:
-                print(f"⚠️  Load timeout (continuing anyway): {load_error}")
+                print(f" Load timeout (continuing anyway): {load_error}")
                 # Continue anyway - the page might be ready
             
             # Quick check - can we find any content?

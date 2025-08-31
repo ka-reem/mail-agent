@@ -3,9 +3,9 @@ Configuration settings for Mail Agent
 """
 
 # App Configuration
-APP_TITLE = "Mail Agent"
-APP_ICON = "📬"
-APP_DESCRIPTION = "Send personalized emails with ease - choose between manual or AI-powered emails"
+APP_TITLE = "📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬"
+APP_ICON = "📧"
+APP_DESCRIPTION = "Send mass personalized email with ease, no account needed."
 
 # UI Configuration
 EMAIL_TEXT_AREA_HEIGHT = 120
@@ -42,4 +42,4 @@ CUSTOM_PROMPT_PLACEHOLDER = "Write a professional email inviting them to a netwo
 EMAIL_BODY_PLACEHOLDER = "Write your email message here..."
 
 # Messages
-FOOTER_TEXT = "Mail Agent - Powered by AgentMail & Gemini AI"
+FOOTER_TEXT = "Created by "" [Kareem](https://github.com/ka-reem)"
