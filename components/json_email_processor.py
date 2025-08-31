@@ -66,14 +66,14 @@ def is_valid_email(email: str) -> bool:
 
 def display_json_email_input() -> Optional[List[Dict[str, str]]]:
     """Display JSON input interface and return extracted contact data"""
-    with st.expander("Import Recipients from JSON (Reccomended)", expanded=False):
+    with st.expander("Import Recipients from JSON (Recommended)", expanded=False):
         st.write("Paste your JSON with recipient info. Make sure to include \"email\": \"their@email.com\". Other fields like name, title, or job will be used automatically. Well-labeled data works better than dumping everything into \"info\".")
 
         json_data = None
         
         json_text = st.text_area(
             "Paste your JSON data here:",
-            placeholder='[\n  {\n    "name": "John Doe",\n    "company": "TechCorp",\n    "title": "Engineer",\n    "email": "john@techcorp.com"\n  }\n]',
+            placeholder='[\n  {\n    "name": "John Doe",\n    "company": "TechCorp",\n    "title": "Senior Engineer",\n    "email": "john@techcorp.com"\n  },\n  {\n    "name": "Sarah Johnson",\n    "company": "StartupXYZ",\n    "title": "Product Manager",\n    "email": "sarah@startupxyz.io"\n  }\n]',
             height=200,
             key="json_paste_input"
         )
@@ -95,7 +95,7 @@ def display_json_email_input() -> Optional[List[Dict[str, str]]]:
             contacts = extract_contact_info_from_json(json_data)
             
             if contacts:
-                st.success(f"✅ Successfully extracted {len(contacts)} valid contacts from JSON")
+                st.success(f"Successfully extracted {len(contacts)} valid contacts from JSON")
                 
                 # Show preview without nested expander
                 st.write("**Preview of extracted data:**")
