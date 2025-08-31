@@ -29,31 +29,98 @@ def extract_name_and_company(email):
     except:
         return "there", "your company"
 
-def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None):
+def clean_placeholder_content(content):
+    """Remove or replace placeholder content with generic professional content"""
+    import re
+    
+    # Common placeholder patterns to replace
+    placeholder_patterns = [
+        (r'\[Your [^\]]+\]', ''),
+        (r'\[your [^\]]+\]', ''),
+        (r'\{[^}]+\}', ''),
+        (r'your major here', 'Computer Science'),
+        (r'put information about yourself here', 'I am a motivated professional with relevant experience'),
+        (r'insert details here', 'relevant details'),
+        (r'mention your experience', 'my experience'),
+        (r'add your qualifications', 'my qualifications'),
+        (r'insert your background', 'my background'),
+        (r'describe your skills', 'my skills'),
+        (r'your experience here', 'relevant professional experience'),
+        (r'your background here', 'a strong background in technology'),
+        (r'your qualifications here', 'relevant qualifications'),
+        (r'your skills here', 'strong technical skills'),
+    ]
+    
+    # Apply replacements (case insensitive)
+    for pattern, replacement in placeholder_patterns:
+        content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
+    
+    # Clean up any remaining brackets or braces that might contain placeholders
+    content = re.sub(r'\[[^\]]*\]', '', content)
+    content = re.sub(r'\{[^}]*\}', '', content)
+    
+    # Clean up extra spaces and line breaks
+    content = re.sub(r'\s+', ' ', content)
+    content = re.sub(r'\n\s*\n', '\n\n', content)
+    
+    return content.strip()
+
+def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False, contact_context=None, sender_info=None):
     """Generate personalized email using Gemini AI"""
     
     if not GEMINI_API_KEY:
         # Fallback if no Gemini API key
-        name, company = extract_name_and_company(recipient_email)
+        if contact_context:
+            name = contact_context.get('name', 'there')
+            company = contact_context.get('company', 'your company')
+        else:
+            name, company = extract_name_and_company(recipient_email)
+        
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
-            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity that might interest you.\n\nBest regards"
+            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity that might interest you."
         }
     
-    name, company = extract_name_and_company(recipient_email)
+    # Use contact context if provided, otherwise extract from email
+    if contact_context:
+        name = contact_context.get('name', 'there')
+        company = contact_context.get('company', 'your company')
+        title = contact_context.get('title', 'Professional')
+    else:
+        name, company = extract_name_and_company(recipient_email)
+        title = "Professional"
     
     try:
         if template:
             # Use template with AI enhancement
+            customization_note = "\n\nIMPORTANT: Generate VERY similar content for consistency across recipients. Only personalize the name and company." if not customize_per_recipient else "\n\nGenerate highly customized content based on the recipient's company and background."
+            
             ai_prompt = f"""
             You are writing a professional email. Use this template but make it more engaging and personalized:
             
             Template: {template}
             
-            Recipient: {name} at {company}
-            Email: {recipient_email}
+            Recipient Details:
+            - Name: {name}
+            - Company: {company}
+            - Title: {title}
+            - Email: {recipient_email}
+            {f"- Additional Context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
-            Generate a compelling subject line and enhance the email body. Replace placeholders like {{name}} and {{company}} appropriately.
+            Sender Information (USE THIS FOR ANY PERSONAL DETAILS):
+            {sender_info if sender_info else "Professional with relevant experience seeking opportunities"}
+            
+            CRITICAL INSTRUCTIONS - READ CAREFULLY:
+            - Generate a compelling subject line and enhance the email body
+            - Replace ALL placeholders like {{name}}, {{company}}, {{title}}, etc. with actual content
+            - When you need information about the sender (like name, background, experience, education), ONLY use the "Sender Information" provided above
+            - NEVER make up names, majors, companies, or personal details about the sender
+            - If sender information is not provided for something specific, write in a general professional manner without specific personal details
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], "your major here", etc.
+            - The email must be 100% complete and ready to send without any editing needed
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," etc.
+            - The user will add their own signature separately
+            {customization_note}
             
             Format your response as:
             SUBJECT: [subject line here]
@@ -61,15 +128,31 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             """
         elif prompt:
             # Use custom prompt
+            customization_note = "\n\nIMPORTANT: Keep the core message consistent across all recipients. Only personalize names and companies." if not customize_per_recipient else "\n\nCreate unique, highly personalized content based on the recipient's specific company and industry."
+            
             ai_prompt = f"""
             {prompt}
             
-            Recipient details:
+            Recipient Details:
             - Name: {name}
             - Company: {company}
+            - Title: {title}
             - Email: {recipient_email}
+            {f"- Additional Context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
             
-            Generate both a compelling subject line and email body.
+            Sender Information (USE THIS FOR ANY PERSONAL DETAILS):
+            {sender_info if sender_info else "Professional with relevant experience seeking opportunities"}
+            
+            CRITICAL INSTRUCTIONS - READ CAREFULLY:
+            - Generate both a compelling subject line and email body
+            - When you need information about the sender (like name, background, experience, education), ONLY use the "Sender Information" provided above
+            - NEVER make up names, majors, companies, or personal details about the sender
+            - If sender information is not provided for something specific, write in a general professional manner without specific personal details
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], "your major here", etc.
+            - The email must be 100% complete and ready to send without any editing needed
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," etc.
+            - The user will add their own signature separately
+            {customization_note}
             
             Format your response as:
             SUBJECT: [subject line here]
@@ -77,10 +160,26 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             """
         else:
             # Default AI generation
-            ai_prompt = f"""
-            Write a professional, personalized email to {name} who works at {company} ({recipient_email}).
+            customization_note = "Keep the message professional and consistent. Only personalize with their name and company." if not customize_per_recipient else "Research typical companies in their domain and create highly specific, customized content."
             
-            Make it engaging and professional. Generate both subject and body.
+            ai_prompt = f"""
+            Write a professional, personalized email to {name} who works at {company} as a {title} ({recipient_email}).
+            {f"Additional context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
+            
+            Sender Information (USE THIS FOR ANY PERSONAL DETAILS):
+            {sender_info if sender_info else "Professional with relevant experience seeking opportunities"}
+            
+            CRITICAL INSTRUCTIONS - READ CAREFULLY:
+            - Make it engaging and professional
+            - Generate both subject and body
+            - When you need information about the sender (like name, background, experience, education), ONLY use the "Sender Information" provided above
+            - NEVER make up names, majors, companies, or personal details about the sender
+            - If sender information is not provided for something specific, write in a general professional manner without specific personal details
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], "your major here", etc.
+            - The email must be 100% complete and ready to send without any editing needed
+            - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," etc.
+            - The user will add their own signature separately
+            {customization_note}
             
             Format your response as:
             SUBJECT: [subject line here]
@@ -89,6 +188,9 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
         
         response = model.generate_content(ai_prompt)
         content = response.text
+        
+        # Post-process to remove any remaining placeholders
+        content = clean_placeholder_content(content)
         
         # Parse the response
         if "SUBJECT:" in content and "BODY:" in content:
@@ -110,7 +212,13 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
     except Exception as e:
         print(f"Gemini API error: {e}")
         # Fallback content
+        if contact_context:
+            name = contact_context.get('name', 'there')
+            company = contact_context.get('company', 'your company')
+        else:
+            name, company = extract_name_and_company(recipient_email)
+            
         return {
             'subject': subject or f"Exciting Opportunity at {company}",
-            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity.\n\nBest regards"
+            'body': f"Hi {name},\n\nI hope this email finds you well. I wanted to reach out regarding an exciting opportunity."
         }
