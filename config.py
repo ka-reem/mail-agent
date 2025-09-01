@@ -47,4 +47,4 @@ CUSTOM_PROMPT_PLACEHOLDER = "Write a professional email inviting them to a netwo
 EMAIL_BODY_PLACEHOLDER = "Write your email message here..."
 
 # Messages
-# FOOTER_TEXT = "Created by "" [Kareem](https://github.com/ka-reem)"
+FOOTER_TEXT = "ACM Outreach Tool" # "Created by "" [Kareem](https://github.com/ka-reem)"
