@@ -3,6 +3,7 @@ Session state management utilities for Mail Agent
 Handles all Streamlit session state operations
 """
 import streamlit as st
+from config import DISABLE_SPAM_FEATURES
 
 def init_session_state():
     """Initialize all session state variables with default values"""
@@ -17,6 +18,12 @@ def init_session_state():
     
     if 'sender_info' not in st.session_state:
         st.session_state.sender_info = ""
+    
+    # Production safety - clear any spam-related session state
+    if DISABLE_SPAM_FEATURES:
+        spam_keys = [k for k in st.session_state.keys() if 'spam' in k.lower()]
+        for key in spam_keys:
+            del st.session_state[key]
 
 def reset_email_data():
     """Reset email generation data"""

@@ -7,6 +7,11 @@ APP_TITLE = "📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬�
 APP_ICON = "📧"
 APP_DESCRIPTION = "Send mass personalized email with ease, no account needed."
 
+# Production Safety Settings
+PRODUCTION_MODE = True  # Set to False for development
+DISABLE_SPAM_FEATURES = PRODUCTION_MODE
+DISABLE_CREATE_NEW_INBOX = PRODUCTION_MODE
+
 # UI Configuration
 EMAIL_TEXT_AREA_HEIGHT = 120
 EMAIL_BODY_HEIGHT = 200
