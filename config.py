@@ -8,7 +8,7 @@ APP_ICON = "📧"
 APP_DESCRIPTION = "Send mass personalized email with ease, no account needed."
 
 # Production Safety Settings
-PRODUCTION_MODE = True  # Set to False for development
+PRODUCTION_MODE = False  # Set to False for full access
 DISABLE_SPAM_FEATURES = PRODUCTION_MODE
 DISABLE_CREATE_NEW_INBOX = PRODUCTION_MODE
 
