@@ -70,6 +70,8 @@ def display_json_email_input() -> Optional[List[Dict[str, str]]]:
         # st.write("Paste your JSON with recipient info. Make sure to include \"email\": \"their@email.com\". Other fields like name, title, or job will be used automatically. Well-labeled data works better than dumping everything into \"info\".")
         st.write("Paste your JSON with recipient data. The only required field is \"email\". Other fields such as name, title, or company are optional but will improve personalization. For best results, use a deep research model to generate enriched JSON based off of emails and names.")
 
+        st.write("[Here's a very simple example using Perplexity Deep Research](https://www.perplexity.ai/search/fill-out-this-json-with-50-rec-EyOlYmqCSt67XDWXadjzzg) to predict emails. This can be improved with better prompting or by finding common email patterns at companies. Otherwise you can use/build your own scraper or buy email lists.")
+
         json_data = None
         
         json_text = st.text_area(

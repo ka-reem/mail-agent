@@ -4,7 +4,7 @@ Configuration settings for Mail Agent
 
 # App Configuration
 APP_TITLE = "📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬"
-APP_ICON = "📧"
+APP_ICON = "📬"
 APP_DESCRIPTION = "Send mass personalized email with ease, no account needed."
 
 # Production Safety Settings
@@ -47,4 +47,4 @@ CUSTOM_PROMPT_PLACEHOLDER = "Write a professional email inviting them to a netwo
 EMAIL_BODY_PLACEHOLDER = "Write your email message here..."
 
 # Message
-FOOTER_TEXT = "ACM Outreach Tool" # "Created by "" [Kareem](https://github.com/ka-reem)"
+FOOTER_TEXT = "Created by "" [Kareem](https://github.com/ka-reem)"
