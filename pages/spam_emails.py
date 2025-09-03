@@ -1,4 +1,33 @@
 import streamlit as st
+from config import DISABLE_SPAM_FEATURES
+
+# Production Safety Check
+if DISABLE_SPAM_FEATURES:
+    st.title("Email Spammer")
+    st.error("**This feature has been disabled.**")
+    st.warning("**Notice:** This functionality is not available in production.")
+    # st.info("💡 **Alternative:** Please use the main AI Email Generator for legitimate email outreach.")
+    
+    # Display disabled interface (non-functional)
+    st.markdown("---")
+    st.subheader("📧 Feature Preview (Disabled)")
+    
+    # All inputs are disabled
+    st.text_input("Target Email:", placeholder="Feature disabled", disabled=True)
+    st.text_input("Subject:", placeholder="Feature disabled", disabled=True)
+    st.text_area("Message Body:", placeholder="Feature disabled", height=100, disabled=True)
+    st.number_input("Number of emails:", min_value=1, max_value=1, value=1, disabled=True)
+    st.slider("Delay between emails:", min_value=0, max_value=1, value=0, disabled=True)
+    st.checkbox("Use AI variation", value=False, disabled=True)
+    
+    if st.button("🚫 Start Campaign (DISABLED)", disabled=True):
+        pass
+    
+    st.markdown("---")
+    st.error("🔒 **Security Notice:** All spam-related features are temporarily disabled in production.")
+    st.stop()
+
+# Original code below (never reached in production)
 from components.agentmail_utils import create_inbox, send_email
 from components.ai_utils import generate_personalized_email
 import time

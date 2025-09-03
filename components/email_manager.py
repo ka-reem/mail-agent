@@ -8,12 +8,20 @@ from typing import List, Dict, Optional
 from components.agentmail_utils import create_inbox, send_email
 from components.ai_utils import generate_personalized_email
 from utils.session_manager import get_email_data, set_email_data, mark_email_sent
+from config import DISABLE_CREATE_NEW_INBOX
 
 class EmailManager:
     """Manages email generation, approval, and sending workflows"""
     
     def __init__(self, create_inbox_toggle: bool, selected_inbox: Optional[str] = None):
-        self.create_inbox_toggle = create_inbox_toggle
+        # Production safety check - force disable create_inbox_toggle if disabled
+        if DISABLE_CREATE_NEW_INBOX:
+            self.create_inbox_toggle = False
+            if create_inbox_toggle:
+                st.error("🚫 **Security Alert:** Attempt to create new inboxes blocked for production safety.")
+        else:
+            self.create_inbox_toggle = create_inbox_toggle
+        
         self.selected_inbox = selected_inbox
     
     def generate_email_data(self, recipients: List[str], email_config: Dict, json_contacts: List[Dict] = None) -> List[Dict]:
