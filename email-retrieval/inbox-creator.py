@@ -17,8 +17,8 @@ client = AgentMail(api_key=api_key)
 
 # List of custom inbox names to create (unique variations)
 inbox_names = [
-    "outreachsfsu",
-    "sfhacks",
+    # "outreachsfsu",
+    # "sfhacks",
     # "infobox",
     # "supportdesk",
     # "salesteam",
@@ -42,6 +42,9 @@ inbox_names = [
     # "customerservice",
     # "technicalsupport",
     # "webmaster",
+    #5d
+    "5-dee",
+    "gratitude"
 ]
 
 print("Creating custom inboxes...")
