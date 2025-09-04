@@ -43,8 +43,9 @@ inbox_names = [
     # "technicalsupport",
     # "webmaster",
     #5d
-    "5-dee",
-    "gratitude"
+    # "5-dee",
+    # "gratitude"
+    "givemeajob"
 ]
 
 print("Creating custom inboxes...")
