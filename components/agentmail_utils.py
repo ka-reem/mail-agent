@@ -46,13 +46,54 @@ def send_email(inbox_id, recipient, subject, body):
     # Add footer to both text and HTML versions
     body_with_footer = f"{body}{footer_text}"
     
-    # Convert body to HTML and add footer
+    # Create properly formatted HTML email
     if body:
-        # Convert plain text to HTML
-        html_body = body_with_footer.replace('\n\n', '</p><p>').replace('\n', '<br>')
-        html_body = f"<p>{html_body}</p>"
+        # Convert plain text to proper HTML with better formatting
+        html_lines = body_with_footer.split('\n')
+        html_content = []
+        
+        for line in html_lines:
+            line = line.strip()
+            if line == "---":
+                html_content.append('<hr style="border: none; border-top: 1px solid #ccc; margin: 20px 0;">')
+            elif line == "":
+                html_content.append('<br>')
+            else:
+                html_content.append(f'<p style="margin: 10px 0; line-height: 1.6;">{line}</p>')
+        
+        # Create complete HTML email structure
+        html_body = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+    <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        {''.join(html_content)}
+    </div>
+    <div style="text-align: center; margin-top: 20px; color: #666; font-size: 12px;">
+        <p>Sent by <a href="https://automailer.streamlit.app/" style="color: #007bff; text-decoration: none;">https://automailer.streamlit.app/</a></p>
+    </div>
+</body>
+</html>"""
     else:
-        html_body = f"<p>{footer_text}</p>"
+        html_body = f"""
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+    <div style="background-color: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <p style="margin: 10px 0; line-height: 1.6;">{footer_text}</p>
+    </div>
+</body>
+</html>"""
     
     return client.inboxes.messages.send(
         inbox_id=inbox_id,
