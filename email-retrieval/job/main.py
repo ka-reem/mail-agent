@@ -23,7 +23,7 @@ load_dotenv()
 # Configuration
 INBOX_ID = "givemeajob@agentmail.to"
 HIRING_EMAIL = "hiring@agentmail.to"
-POLL_INTERVAL = 2  # Check for new emails every 30 seconds
+POLL_INTERVAL = 4 # Check for new emails every 5 seconds(sweet spot seems like 8)
 
 # Initialize AgentMail client
 agentmail_api_key = os.getenv("AGENTMAIL_API_KEY")
@@ -83,7 +83,7 @@ def generate_job_application_response(previous_message, conversation_history="")
             messages=[
                 {
                     "role": "system", 
-                    "content": f"You are a professional but enthusiastic job seeker named Alex. {'This is your first contact with this hiring manager.' if is_first_message else 'You are continuing an ongoing job application conversation.'}"
+                    "content": f"You are an extremely pushy, desperate job seeker named Alex who needs this job badly. {'This is your first contact - be aggressive about getting an interview.' if is_first_message else 'You are continuing a job conversation - push hard for the next step.'} Keep responses under 100 words and very direct."
                 },
                 {
                     "role": "user",
@@ -100,23 +100,13 @@ def generate_job_application_response(previous_message, conversation_history="")
         print(f"Llama API error: {e}")
         # Fallback response based on conversation state
         if is_first_message:
-            return """Hi there,
+            return """Hi! I'm Alex and I NEED this job. I have exactly what you're looking for and I'm ready to start TODAY. 
 
-Thank you so much for reaching out! I'm incredibly excited about this opportunity and would love to discuss how my skills and passion can contribute to your team.
-
-I bring a unique combination of technical expertise and creative problem-solving that I believe would be a perfect fit for your organization. I'm eager to learn more about the role and how I can make an immediate impact.
-
-Could we schedule a brief call this week to discuss further? I'm available at your convenience and ready to start contributing right away!
-
-Looking forward to hearing from you soon."""
+Can we talk this week? I'm available anytime - literally anytime. This is my dream opportunity and I won't let you down!"""
         else:
-            return """Thank you for your response!
+            return """I'm ready to move forward RIGHT NOW. Whatever you need, I can do it. 
 
-I'm even more excited after hearing from you. This opportunity sounds like exactly what I've been looking for, and I'm confident I can bring immediate value to your team.
-
-When would be a good time for us to discuss this further? I'm ready to move forward whenever works best for you.
-
-Looking forward to our next steps!"""
+When can we schedule an interview? I'm available 24/7 and ready to prove I'm your best choice!"""
 
 def get_unreplied_threads():
     """Get unread threads specifically from the givemeajob@agentmail.to inbox"""
