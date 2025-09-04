@@ -36,15 +36,30 @@ def send_email(inbox_id, recipient, subject, body):
         if not recipient or not subject or not body:
             raise Exception("Invalid email parameters")
         
-        # Check for spam-like patterns (basic validation)
-        if len(body) < 10:
-            st.warning("⚠️ Very short email body detected - please ensure legitimate use.")
+        # # Check for spam-like patterns (basic validation)
+        # if len(body) < 10:
+        #     st.warning("⚠️ Very short email body detected - please ensure legitimate use.")
+    
+    # Add visible footer to email body
+    footer_text = "\n\n---\nSent by https://automailer.streamlit.app/"
+    
+    # Add footer to both text and HTML versions
+    body_with_footer = f"{body}{footer_text}"
+    
+    # Convert body to HTML and add footer
+    if body:
+        # Convert plain text to HTML
+        html_body = body_with_footer.replace('\n\n', '</p><p>').replace('\n', '<br>')
+        html_body = f"<p>{html_body}</p>"
+    else:
+        html_body = f"<p>{footer_text}</p>"
     
     return client.inboxes.messages.send(
         inbox_id=inbox_id,
         to=recipient,
         subject=subject,
-        text=body
+        text=body_with_footer,
+        html=html_body
     )
 
 def list_messages(inbox_id):

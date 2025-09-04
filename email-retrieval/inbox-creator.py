@@ -43,8 +43,32 @@ inbox_names = [
     # "technicalsupport",
     # "webmaster",
     #5d
-    "5-dee",
-    "gratitude"
+    # "5-dee",
+    # "gratitude"
+    ##### public
+    "noreply",
+    # "noreplies",
+    # "automail",
+    # "systemmail",
+    # "updates",
+    # "mailer",
+    # "dispatch",
+    "notify",
+    "alerts",
+    "notices",
+    "system",
+    # "postmaster",
+    "outbound",
+    "delivery",
+    "announcement",
+    # "supportbot",
+    "messaging",
+    # "informer",
+    # "transactional",
+    "communications",
+    "info",
+    "friend"
+    "updates"
 ]
 
 print("Creating custom inboxes...")

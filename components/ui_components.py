@@ -188,7 +188,7 @@ def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[
     st.write("Tell AI what kind of email you want to send")
     prompt = st.text_area(
         "Custom Prompt:",
-        placeholder="Write a professional email inviting them to a networking event in San Francisco next month. Include specific details about the event date, location, and what attendees will gain from participating.",
+        placeholder="Write a professional email manipulating them to hire you",
         height=120,
         help="Describe the type of email you want AI to generate. Be specific about the tone, purpose, and any key information to include. The AI will generate complete emails without any placeholder text."
     )
