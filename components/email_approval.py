@@ -31,18 +31,24 @@ class EmailApprovalManager:
                     st.write("✏️ **Edit Email Content:**")
                     
                     # Editable subject
+                    subject_key = f"subject_{i}_{email_info['recipient']}"
+                    if subject_key not in st.session_state:
+                        st.session_state[subject_key] = email_info['subject']
+                    
                     edited_subject = st.text_input(
                         "Subject:",
-                        value=email_info['subject'],
-                        key=f"subject_{i}_{email_info['recipient']}"
+                        key=subject_key
                     )
                     
                     # Editable body
+                    body_key = f"body_{i}_{email_info['recipient']}"
+                    if body_key not in st.session_state:
+                        st.session_state[body_key] = email_info['body']
+                    
                     edited_body = st.text_area(
                         "Email Body:",
-                        value=email_info['body'],
                         height=200,
-                        key=f"body_{i}_{email_info['recipient']}"
+                        key=body_key
                     )
                     
                     # Update the email data if content was edited
@@ -60,8 +66,7 @@ class EmailApprovalManager:
                                         st.session_state.email_data[j]['subject'] = edited_subject
                                         # Update all other subject inputs
                                         subject_key = f"subject_{j}_{st.session_state.email_data[j]['recipient']}"
-                                        if subject_key in st.session_state:
-                                            st.session_state[subject_key] = edited_subject
+                                        st.session_state[subject_key] = edited_subject
                                 st.success(f"✅ Subject '{edited_subject}' applied to all emails!")
                                 st.rerun()
                     
@@ -110,10 +115,14 @@ class EmailApprovalManager:
         # Global subject change option
         st.markdown("#### 🎯 Bulk Subject Change")
         with st.expander("Change subject for ALL emails", expanded=False):
+            # Use dynamic key to allow clearing the input
+            if 'bulk_subject_counter' not in st.session_state:
+                st.session_state.bulk_subject_counter = 0
+            
             new_subject = st.text_input(
                 "New subject line:",
                 placeholder="Enter new subject for all emails",
-                key="bulk_subject_input"
+                key=f"bulk_subject_input_{st.session_state.bulk_subject_counter}"
             )
             
             if new_subject and st.button("📝 Apply to ALL emails", key="apply_bulk_subject"):
@@ -123,12 +132,13 @@ class EmailApprovalManager:
                         st.session_state.email_data[i]['subject'] = new_subject
                         # Update all subject inputs
                         subject_key = f"subject_{i}_{st.session_state.email_data[i]['recipient']}"
-                        if subject_key in st.session_state:
-                            st.session_state[subject_key] = new_subject
+                        st.session_state[subject_key] = new_subject
                 
                 st.success(f"✅ Subject '{new_subject}' applied to all emails!")
-                # Clear the input
-                st.session_state.bulk_subject_input = ""
+                # Clear the input by using a different key to force widget recreation
+                if 'bulk_subject_counter' not in st.session_state:
+                    st.session_state.bulk_subject_counter = 0
+                st.session_state.bulk_subject_counter += 1
                 st.rerun()
         
         st.markdown("---")
