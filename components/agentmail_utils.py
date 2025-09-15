@@ -40,11 +40,69 @@ def send_email(inbox_id, recipient, subject, body):
         if len(body) < 10:
             st.warning("⚠️ Very short email body detected - please ensure legitimate use.")
     
+    # Convert plain text body into simple HTML for nicer formatting
+    def _convert_text_to_html(text: str) -> str:
+        import html as _html
+        if not text:
+            return ''
+
+        escaped = _html.escape(text)
+        lines = escaped.splitlines()
+
+        parts = []
+        para = []
+        in_list = False
+
+        def flush_para():
+            nonlocal para
+            if not para:
+                return
+            parts.append(f"<p style=\"margin:0 0 12px 0;line-height:1.45;\">{'<br/>'.join(para)}</p>")
+            para = []
+
+        for raw in lines:
+            line = raw.strip()
+            if not line:
+                # blank line -> paragraph break
+                flush_para()
+                continue
+
+            # simple unordered list handling
+            if line.startswith(('- ', '* ')):
+                if not in_list:
+                    flush_para()
+                    parts.append('<ul style="margin:0 0 12px 18px;padding:0;">')
+                    in_list = True
+                parts.append(f"<li style=\"margin-bottom:6px;\">{_html.escape(line[2:].strip())}</li>")
+                continue
+
+            # normal line -> part of paragraph
+            if in_list:
+                parts.append('</ul>')
+                in_list = False
+
+            para.append(line)
+
+        flush_para()
+        if in_list:
+            parts.append('</ul>')
+
+        # Wrap with a minimal body style
+        html_body = (
+            '<!doctype html><html><head><meta charset="utf-8"></head>'
+            '<body style="font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif; color:#111; font-size:14px;">'
+            + ''.join(parts) + '</body></html>'
+        )
+        return html_body
+
+    html_body = _convert_text_to_html(body)
+
     return client.inboxes.messages.send(
         inbox_id=inbox_id,
         to=recipient,
         subject=subject,
-        text=body
+        text=body,
+        html=html_body
     )
 
 def list_messages(inbox_id):
