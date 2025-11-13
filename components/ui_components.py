@@ -5,6 +5,7 @@ import streamlit as st
 from typing import List, Dict, Optional, Tuple
 from utils.validators import extract_emails_from_text, create_inbox_mapping
 from components.agentmail_utils import list_inboxes
+from config import DISABLE_CREATE_NEW_INBOX
 
 def display_email_type_selector() -> None:
     """Display email type selection buttons"""
@@ -52,11 +53,24 @@ def display_recipients_input() -> List[str]:
 def display_inbox_settings() -> Tuple[bool, Optional[str]]:
     """Display inbox settings and return configuration"""
     st.subheader("Inbox Settings")
-    create_inbox_toggle = st.checkbox(
-        "Create new inbox per email", 
-        value=False, 
-        help="Creates a new unique separate inbox for each outgoing email, ensuring messages are always delivered without bounces."
-    )
+    
+    # Production safety check
+    if DISABLE_CREATE_NEW_INBOX:
+        st.warning("🔒 **Security Notice:** Creating new inboxes per email has been disabled for production safety.")
+        create_inbox_toggle = st.checkbox(
+            "Create new inbox per email (DISABLED)", 
+            value=False, 
+            disabled=True,
+            help="This feature is disabled in production to prevent abuse and ensure responsible email usage."
+        )
+        # Force to False regardless of checkbox state
+        create_inbox_toggle = False
+    else:
+        create_inbox_toggle = st.checkbox(
+            "Create new inbox per email", 
+            value=False, 
+            help="Creates a new unique separate inbox for each outgoing email, ensuring messages are always delivered without bounces."
+        )
     
     selected_inbox = None
     if not create_inbox_toggle:
@@ -119,6 +133,8 @@ def display_regular_email_form() -> Tuple[str, str]:
             height=100,
             help="Write your custom email signature. This will be automatically added to the end of each email."
         )
+        
+        st.info("**Tip:** If you're looking for responses, include your contact information in your signature and consider adding a note like 'This email is not actively monitored. Please reach out to yourname@email.com for inquiries.'")
         
         if signature:
             # Append signature to body if it exists
@@ -197,6 +213,8 @@ def display_ai_email_settings() -> Tuple[Optional[str], Optional[str], Optional[
             height=120,
             help="Write your custom email signature. This will be automatically added to the end of each email."
         )
+        
+        st.info("**Tip:** If you're looking for responses, include your contact information in your signature and consider adding a note like 'This email is not actively monitored. Please reach out to yourname@email.com for inquiries.'")
     
     # Store signature in session state for use in email generation
     if include_signature and signature:

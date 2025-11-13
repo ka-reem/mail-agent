@@ -7,6 +7,11 @@ APP_TITLE = "📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬�
 APP_ICON = "📧"
 APP_DESCRIPTION = "Send mass personalized email with ease, no account needed."
 
+# Production Safety Settings
+PRODUCTION_MODE = False  # Set to False for full access
+DISABLE_SPAM_FEATURES = PRODUCTION_MODE
+DISABLE_CREATE_NEW_INBOX = PRODUCTION_MODE
+
 # UI Configuration
 EMAIL_TEXT_AREA_HEIGHT = 120
 EMAIL_BODY_HEIGHT = 200
@@ -42,4 +47,4 @@ CUSTOM_PROMPT_PLACEHOLDER = "Write a professional email inviting them to a netwo
 EMAIL_BODY_PLACEHOLDER = "Write your email message here..."
 
 # Messages
-FOOTER_TEXT = "Created by "" [Kareem](https://github.com/ka-reem)"
+FOOTER_TEXT = "ACM Outreach Tool" # "Created by "" [Kareem](https://github.com/ka-reem)"

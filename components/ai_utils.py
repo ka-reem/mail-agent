@@ -1,17 +1,27 @@
-import google.generativeai as genai
+# import google.generativeai as genai
 import os
 from dotenv import load_dotenv
+from openai import OpenAI
 
 # Load environment variables
 load_dotenv()
 
-# Configure Gemini API
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-if GEMINI_API_KEY:
-    genai.configure(api_key=GEMINI_API_KEY)
-    # Use the latest Gemini model with high rate limits
-    model = genai.GenerativeModel('gemini-2.0-flash-lite')  # Fast model with high rate limits
-    # all models: https://ai.google.dev/gemini-api/docs/models
+# Configure Llama API
+LLAMA_API_KEY = os.getenv("LLAMA_API_KEY")
+llama_client = None
+if LLAMA_API_KEY:
+    llama_client = OpenAI(
+        api_key=LLAMA_API_KEY,
+        base_url="https://api.llama.com/compat/v1/"
+    )
+
+# Gemini Configuration (DISABLED)
+# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+# if GEMINI_API_KEY:
+#     genai.configure(api_key=GEMINI_API_KEY)
+#     # Use the latest Gemini model with high rate limits
+#     model = genai.GenerativeModel('gemini-2.0-flash-lite')  # Fast model with high rate limits
+#     # all models: https://ai.google.dev/gemini-api/docs/models
 
 def extract_name_and_company(email):
     """Extract name and company from email address using simple logic"""
@@ -66,10 +76,10 @@ def clean_placeholder_content(content):
     return content.strip()
 
 def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False, contact_context=None, sender_info=None):
-    """Generate personalized email using Gemini AI"""
+    """Generate personalized email using Llama API"""
     
-    if not GEMINI_API_KEY:
-        # Fallback if no Gemini API key
+    if not LLAMA_API_KEY or not llama_client:
+        # Fallback if no Llama API key
         if contact_context:
             name = contact_context.get('name', 'there')
             company = contact_context.get('company', 'your company')
@@ -186,8 +196,24 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             BODY: [email body here]
             """
         
-        response = model.generate_content(ai_prompt)
-        content = response.text
+        # Use Llama API
+        completion = llama_client.chat.completions.create(
+            model="Llama-3.3-70B-Instruct",  # Using a good balance model
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a professional email writing assistant. Generate complete, ready-to-send emails based on the user's requirements."
+                },
+                {
+                    "role": "user",
+                    "content": ai_prompt
+                }
+            ],
+            max_tokens=1000,
+            temperature=0.7
+        )
+        
+        content = completion.choices[0].message.content
         
         # Post-process to remove any remaining placeholders
         content = clean_placeholder_content(content)
@@ -210,7 +236,7 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             }
     
     except Exception as e:
-        print(f"Gemini API error: {e}")
+        print(f"Llama API error: {e}")
         # Fallback content
         if contact_context:
             name = contact_context.get('name', 'there')

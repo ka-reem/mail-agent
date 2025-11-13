@@ -49,6 +49,21 @@ class EmailApprovalManager:
                     if edited_subject != email_info['subject'] or edited_body != email_info['body']:
                         st.session_state.email_data[i]['subject'] = edited_subject
                         st.session_state.email_data[i]['body'] = edited_body
+                        
+                        # Show bulk subject change option if subject was changed
+                        if edited_subject != email_info['subject']:
+                            st.info("💡 Subject changed for this email")
+                            if st.button(f"📝 Apply this subject to ALL emails", key=f"bulk_subject_{i}"):
+                                # Apply the new subject to all emails
+                                for j in range(len(st.session_state.email_data)):
+                                    if not st.session_state.email_data[j].get('sent', False):
+                                        st.session_state.email_data[j]['subject'] = edited_subject
+                                        # Update all other subject inputs
+                                        subject_key = f"subject_{j}_{st.session_state.email_data[j]['recipient']}"
+                                        if subject_key in st.session_state:
+                                            st.session_state[subject_key] = edited_subject
+                                st.success(f"✅ Subject '{edited_subject}' applied to all emails!")
+                                st.rerun()
                     
                     st.markdown("---")
                     self._display_approval_controls(i, email_info)
@@ -91,6 +106,30 @@ class EmailApprovalManager:
                     # Update individual checkboxes
                     approval_key = f"approve_{i}_{email_info['recipient']}"
                     st.session_state[approval_key] = True
+        
+        # Global subject change option
+        st.markdown("#### 🎯 Bulk Subject Change")
+        with st.expander("Change subject for ALL emails", expanded=False):
+            new_subject = st.text_input(
+                "New subject line:",
+                placeholder="Enter new subject for all emails",
+                key="bulk_subject_input"
+            )
+            
+            if new_subject and st.button("📝 Apply to ALL emails", key="apply_bulk_subject"):
+                # Apply new subject to all emails
+                for i in range(len(st.session_state.email_data)):
+                    if not st.session_state.email_data[i].get('sent', False):
+                        st.session_state.email_data[i]['subject'] = new_subject
+                        # Update all subject inputs
+                        subject_key = f"subject_{i}_{st.session_state.email_data[i]['recipient']}"
+                        if subject_key in st.session_state:
+                            st.session_state[subject_key] = new_subject
+                
+                st.success(f"✅ Subject '{new_subject}' applied to all emails!")
+                # Clear the input
+                st.session_state.bulk_subject_input = ""
+                st.rerun()
         
         st.markdown("---")
     

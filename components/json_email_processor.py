@@ -67,7 +67,8 @@ def is_valid_email(email: str) -> bool:
 def display_json_email_input() -> Optional[List[Dict[str, str]]]:
     """Display JSON input interface and return extracted contact data"""
     with st.expander("Import Recipients from JSON (Recommended)", expanded=False):
-        st.write("Paste your JSON with recipient info. Make sure to include \"email\": \"their@email.com\". Other fields like name, title, or job will be used automatically. Well-labeled data works better than dumping everything into \"info\".")
+        # st.write("Paste your JSON with recipient info. Make sure to include \"email\": \"their@email.com\". Other fields like name, title, or job will be used automatically. Well-labeled data works better than dumping everything into \"info\".")
+        st.write("Paste your JSON with recipient data. The only required field is \"email\". Other fields such as name, title, or company are optional but will improve personalization. For best results, use a deep research model to generate enriched JSON based off of emails and names.")
 
         json_data = None
         

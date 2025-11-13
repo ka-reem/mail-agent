@@ -1,5 +1,6 @@
 streamlit
 agentmail
 python-dotenv
-google-generativeai
+openai
+# google-generativeai  # Commented out - using Llama API now
 playwright
