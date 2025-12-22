@@ -1,0 +1,522 @@
+[
+  {
+    "name": "Kajal Gupta",
+    "company": "Rubrik",
+    "title": "Global TA",
+    "email": "kajal.gupta@rubrik.com",
+    "linkedin": "https://www.linkedin.com/in/kajalg",
+    "current_info": "Director, Global TA Head for Engineering, Product, and Customer Support at Rubrik (since Mar 2024), leading global engineering talent strategy, workforce planning, internal mobility, and D&I; prior Senior Manager - APAC at Rubrik; public posts highlight AFCEA West event, engineering hiring needs, and Rubrik's GenAI 'Ruby' plus a design team spotlight and a Senior Talent Partner opening."
+  },
+  {
+    "name": "Ernie Campos",
+    "company": "Slalom",
+    "title": "Sr Manager, Talent Acquisition",
+    "email": "ernie.campos@slalom.com",
+    "linkedin": "https://www.linkedin.com/in/ernesto-ernie-campos-57853763",
+    "current_info": "Senior Manager, Talent Acquisition at Slalom (Dec 2021–present) within the Enterprise capability, following prior Manager TA; public posts include hiring in México and Colombia and a message supporting colleagues during organizational changes."
+  },
+  {
+    "name": "Christie Kuhn",
+    "company": "Amazon",
+    "title": "Early Careers Recruiter",
+    "email": "rchrkuhn@amazon.jobs",
+    "linkedin": "https://www.linkedin.com/in/christie-kuhn-a17457220",
+    "current_info": ""
+  },
+  {
+    "name": "Tara Hopkins",
+    "company": "UPS",
+    "title": "HR Business Partner",
+    "email": "thopkins@ups.com",
+    "linkedin": "https://www.linkedin.com/in/tara-hopkins26",
+    "current_info": "Human Resources Business Partner at UPS (Mar 2024–present) based in Parsippany, NJ; previously Talent Development Supervisor (Oct 2023–Mar 2024) and University Relations & I&D Specialist (Aug 2021–Oct 2023); also maintains part-time role as Shift Manager at Leo's Ice Cream Company for 9+ years; holds K-6 Elementary Education and 5-8 Social Studies certifications."
+  },
+  {
+    "name": "Barbara Rivera",
+    "company": "JPMorgan Chase & Co.",
+    "title": "Vice President, Design Global Practices Talent Acquisition",
+    "email": "barbara.rivera@jpmchase.com",
+    "linkedin": "https://www.linkedin.com/in/barbara-paola-rivera",
+    "current_info": "Vice President, Design Global Practices Talent Acquisition at JPMorganChase (Jan 2025–present), scaling large tech teams; previously Senior UX Design Recruiter Associate (Apr 2022–Dec 2024) for Digital Experience Design & Data & Analytics; background in diversity recruiting and federal government hires; recent posts on UX Designer openings and VP Experience Design roles."
+  },
+  {
+    "name": "Violet Rylo",
+    "company": "KINESSO",
+    "title": "Talent Acquisition Manager",
+    "email": "violet.rylo@mbww.com",
+    "linkedin": "https://www.linkedin.com/in/violet-rylo-8189139",
+    "current_info": "Global Talent Acquisition Manager at IPG Mediabrands/KINESSO (Nov 2019–present), recruiting for digital media, tech, and performance marketing; leads Internship Program & virtual campus events; expert in AI-driven sourcing, DEI initiatives; recent posts promoting Director of Product Management roles."
+  },
+  {
+    "name": "Olga Bartolomeo",
+    "company": "Citi",
+    "title": "Recruiting Senior Manager",
+    "email": "Olga.Bartolomeo@citi.com",
+    "linkedin": "https://www.linkedin.com/in/olga-bartolomeo-722a34111",
+    "current_info": "Recruiting Senior Manager, VP at Citi in Banking, International & Client (Feb 2024–present); previously Technology Recruiting Lead and Senior Technical Recruiter; multilingual (Russian, English, Ukrainian, French, Spanish) with marketing & talent acquisition background; recent posts on AI-powered resume matching & candidate experience."
+  },
+  {
+    "name": "Lindsay Ahrens",
+    "company": "Edward Jones",
+    "title": "Executive Recruiting Talent Consultant",
+    "email": "lindsay.ahrens@edwardjones.com",
+    "linkedin": "https://www.linkedin.com/in/lindsay-ahrens-2a37987",
+    "current_info": "Executive Recruiting Talent Consultant – Researcher at Edward Jones (Sep 2023–present), partnering with executive leaders on talent strategies; formerly Senior Recruiter (Oct 2017–Aug 2023) for Marketing & Advice divisions; recent post celebrating Edward Jones' Fortune 100 Best Companies recognition."
+  },
+  {
+    "name": "Sarah Bajohr",
+    "company": "BNY Mellon",
+    "title": "Senior Analyst - Employee Relations",
+    "email": "Sarah.Bajohr@bnymellon.com",
+    "linkedin": "https://www.linkedin.com/in/sarah-bajohrud",
+    "current_info": "Director of Operations at Waypoint Legal (Mar 2025–present); prior Senior Analyst – Employee Relations at BNY Mellon (Feb 2022–Apr 2023) and Specialist (Apr 2023–Apr 2024); background includes HR Administrator managing 60–80 interviews weekly."
+  },
+  {
+    "name": "Danielle Mendez",
+    "company": "Federal Reserve Bank Of New York",
+    "title": "Talent Partner | Executive Search",
+    "email": "Danielle.mendez@ny.frb.org",
+    "linkedin": "https://www.linkedin.com/in/daniellemendezvazquez",
+    "current_info": "Talent Partner – Executive Recruiting at NY Fed (Oct 2022–present); former Inclusion Strategist & Talent Advisor; 10+ years in financial services TA, DEI, L&D; holds BS (UVM) & MSW (NYU)."
+  },
+  {
+    "name": "Mike Hallahan",
+    "company": "Material",
+    "title": "Associate Director Talent Acquisition",
+    "email": "mike.hallahan@materialplus.io",
+    "linkedin": "https://www.linkedin.com/in/mikhallahan/",
+    "current_info": ""
+  },
+  {
+    "name": "Bobbie Lachani",
+    "company": "Altice USA",
+    "title": "Talent Acquisition Specialist",
+    "email": "bobbie.lachani@alticeusa.com",
+    "linkedin": "https://www.linkedin.com/in/bobbielachani/",
+    "current_info": "Talent Acquisition Specialist at Optimum/Altice USA (Oct 2021–Jun 2025); promoted from contract to Corporate TA for entry–director roles; managed vendor relations, employer branding, career fairs; pursuing HR Management Certificate (Univ. of Phoenix); former retail manager."
+  },
+  {
+    "name": "Megan Huang",
+    "company": "ACT Commodities",
+    "title": "Jr Recruiter",
+    "email": "mhuang@actcommodities.com",
+    "linkedin": "https://www.linkedin.com/in/megan-huangg/",
+    "current_info": ""
+  },
+  {
+    "name": "Ali Perez",
+    "company": "ACT Commodities",
+    "title": "Recruitment Manager",
+    "email": "aperez@actcommodities.com",
+    "linkedin": "https://www.linkedin.com/in/ali-perez-181bb7111/",
+    "current_info": ""
+  },
+  {
+    "name": "Annie Henry",
+    "company": "Wall Street Prep",
+    "title": "Senior Recruiter",
+    "email": "ahenry@wallstreetprep.com",
+    "linkedin": "https://www.linkedin.com/in/annierhenry/",
+    "current_info": ""
+  },
+  {
+    "name": "Lauren Khan",
+    "company": "Mercer Advisors",
+    "title": "Talent Acquisition Partner",
+    "email": "Lkhan@merceradvisors.com",
+    "linkedin": "https://www.linkedin.com/in/laurenkhan/",
+    "current_info": ""
+  },
+  {
+    "name": "Bridget Fornaro",
+    "company": "NBCUniversal",
+    "title": "Talent Acquisition Coordinator",
+    "email": "Bridget.Fornaro@nbcuni.com",
+    "linkedin": "https://www.linkedin.com/in/bridgetnfornaro/",
+    "current_info": ""
+  },
+  {
+    "name": "Lino Jean",
+    "company": "Rockstar Games",
+    "title": "Senior Learning & Engagement Specialist",
+    "email": "lino.jean@rockstargames.com",
+    "linkedin": "https://www.linkedin.com/in/lino-jean-b9b35a73/",
+    "current_info": ""
+  },
+  {
+    "name": "Alicia Lee",
+    "company": "Rockstar Games",
+    "title": "Senior Talent Acquisition Specialist",
+    "email": "alicia.lee@rockstargames.com",
+    "linkedin": "https://www.linkedin.com/in/aliciapowerslee/",
+    "current_info": ""
+  },
+  {
+    "name": "Kendall Kucera",
+    "company": "Rippling",
+    "title": "Technical Sourcer",
+    "email": "kkucera@rippling.com",
+    "linkedin": "https://www.linkedin.com/in/kendall-kucera/",
+    "current_info": ""
+  },
+  {
+    "name": "Felix Rendon",
+    "company": "DoorDash",
+    "title": "Technical Sourcer",
+    "email": "felix.randon@doordash.com",
+    "linkedin": "https://www.linkedin.com/in/felixrendon",
+    "current_info": ""
+  },
+  {
+    "name": "Brooke Gober",
+    "company": "Splunk",
+    "title": "Senior Technical Sourcer",
+    "email": "bgober@splunk.com",
+    "linkedin": "https://www.linkedin.com/in/brooke-gober-731b68b1",
+    "current_info": ""
+  },
+  {
+    "name": "Mina Abed",
+    "company": "Grammarly",
+    "title": "Senior Technical Sourcer",
+    "email": "mina.abed@grammarly.com",
+    "linkedin": "https://www.linkedin.com/in/minaabed",
+    "current_info": ""
+  },
+  {
+    "name": "Brendan Boon",
+    "company": "Waymo",
+    "title": "Technical Sourcer",
+    "email": "bboon@waymo.com",
+    "linkedin": "https://www.linkedin.com/in/boonbrendan",
+    "current_info": ""
+  },
+  {
+    "name": "Kelli Snook",
+    "company": "Amazon",
+    "title": "AWS Tech Recruiter",
+    "email": "kellisnook@amazon.com",
+    "linkedin": "https://www.linkedin.com/in/kelli-snook-bab938bb/",
+    "current_info": ""
+  },
+  {
+    "name": "Sammy Johnson",
+    "company": "Tinder",
+    "title": "Tech Recruiting Manager",
+    "email": "sammy@tinder.com",
+    "linkedin": "https://www.linkedin.com/in/sammy-johnson-68625279",
+    "current_info": ""
+  },
+  {
+    "name": "Mia Anderson",
+    "company": "Google",
+    "title": "Campus Recruiter",
+    "email": "miaanderson@google.com",
+    "linkedin": "https://www.linkedin.com/in/mia-anderson-311210217",
+    "current_info": ""
+  },
+  {
+    "name": "Kadi Chow",
+    "company": "Riot Games",
+    "title": "Recruiter",
+    "email": "kchow@riotgames.com",
+    "linkedin": "https://www.linkedin.com/in/kadichow",
+    "current_info": ""
+  },
+  {
+    "name": "Bhavna Gupta",
+    "company": "Amazon",
+    "title": "Talent Acquisition",
+    "email": "bhavnagupta@amazon.com",
+    "linkedin": "https://www.linkedin.com/in/guptabhavna",
+    "current_info": ""
+  },
+  {
+    "name": "Lauren Beck",
+    "company": "Google",
+    "title": "Technical Recruiter",
+    "email": "laurenb@google.com",
+    "linkedin": "https://www.linkedin.com/in/lauren-beck-1131a6a3",
+    "current_info": ""
+  },
+  {
+    "name": "Kurtis Tran",
+    "company": "TikTok",
+    "title": "Technical Sourcer",
+    "email": "kurtis.tran@tiktok.com",
+    "linkedin": "https://www.linkedin.com/in/kurtis-tran-3432a7159",
+    "current_info": ""
+  },
+  {
+    "name": "Walker Smith",
+    "company": "SpaceX",
+    "title": "Technical Recruiter",
+    "email": "walker.smith@spacex.com",
+    "linkedin": "https://www.linkedin.com/in/walkertmsmith",
+    "current_info": ""
+  },
+  {
+    "name": "Jillian Arbow",
+    "company": "Rover",
+    "title": "Talent Acquisition",
+    "email": "jillian.arbow@rover.com",
+    "linkedin": "https://www.linkedin.com/in/jillian-arbow-6878b140/",
+    "current_info": ""
+  },
+  {
+    "name": "Janet Black",
+    "company": "American Airlines",
+    "title": "Recruiter",
+    "email": "janet.black@aa.com",
+    "linkedin": "https://www.linkedin.com/in/janet-black-3923121b8",
+    "current_info": ""
+  },
+  {
+    "name": "Candice Johnson",
+    "company": "NBC Universal",
+    "title": "Early Talent Recruiter",
+    "email": "Candice.Johnson@nbcuni.com",
+    "linkedin": "https://www.linkedin.com/in/candjohnson",
+    "current_info": ""
+  },
+  {
+    "name": "Priscilla Huh",
+    "company": "Two Sigma",
+    "title": "Recruiting Coordination Lead",
+    "email": "priscilla.huh@twosigma.com",
+    "linkedin": "https://www.linkedin.com/in/priscilla-huh-6483a5159/",
+    "current_info": ""
+  },
+  {
+    "name": "Christiana Holladay",
+    "company": "Optiver",
+    "title": "Campus Technology Recruiter",
+    "email": "christianaholladay@optiver.us",
+    "linkedin": "https://www.linkedin.com/in/christianaholladay",
+    "current_info": ""
+  },
+  {
+    "name": "Louis Lee",
+    "company": "Codeium",
+    "title": "Technical Recruiter",
+    "email": "louis.lee@codeium.com",
+    "linkedin": "https://www.linkedin.com/in/louisleeta/",
+    "current_info": ""
+  },
+  {
+    "name": "Aparna Sreeraman",
+    "company": "Uber",
+    "title": "Principal Technical Recruiter",
+    "email": "aparna.sreeraman@uber.com",
+    "linkedin": "https://www.linkedin.com/in/aparna-sreeraman-360b9b/",
+    "current_info": ""
+  },
+  {
+    "name": "Jaylyn Jones",
+    "company": "Duolingo",
+    "title": "University Recruiter",
+    "email": "jaylyn@duolingo.com",
+    "linkedin": "https://www.linkedin.com/in/jaylynj",
+    "current_info": ""
+  },
+  {
+    "name": "Rachel Holmes",
+    "company": "Yahoo",
+    "title": "Emerging Careers Recruiter",
+    "email": "rachael.holmes@yahooinc.com",
+    "linkedin": "https://www.linkedin.com/in/rachael-holmes99/",
+    "current_info": ""
+  },
+  {
+    "name": "Kathleen Kelejian",
+    "company": "Scale AI",
+    "title": "Recruiter",
+    "email": "kathleen@scale.com",
+    "linkedin": "https://www.linkedin.com/in/kathleen-kelejian-2284abb7/",
+    "current_info": ""
+  },
+  {
+    "name": "Ahmed Moustafa",
+    "company": "Scale AI",
+    "title": "Senior Recruiter",
+    "email": "ahmed@scale.com",
+    "linkedin": "https://www.linkedin.com/in/ahmed-moustafa-6a674283/",
+    "current_info": ""
+  },
+  {
+    "name": "John Parker",
+    "company": "Scale AI",
+    "title": "Technical Sourcer",
+    "email": "john@scale.com",
+    "linkedin": "https://www.linkedin.com/in/johnparker03/",
+    "current_info": ""
+  },
+  {
+    "name": "Christian Guanzing",
+    "company": "Scale AI",
+    "title": "University Recruiter",
+    "email": "christian@scale.com",
+    "linkedin": "https://www.linkedin.com/in/christian-vitug-guanzing/",
+    "current_info": ""
+  },
+  {
+    "name": "Robin Lee",
+    "company": "Scale AI",
+    "title": "University Recruiter",
+    "email": "robin@scale.com",
+    "linkedin": "https://www.linkedin.com/in/robinhlee/",
+    "current_info": ""
+  },
+  {
+    "name": "Priscila Whitman",
+    "company": "Databricks",
+    "title": "Technial Sourcer",
+    "email": "priscila.whitman@databricks.com",
+    "linkedin": "https://www.linkedin.com/in/priscila-cantu-whitman-4018a740/",
+    "current_info": ""
+  },
+  {
+    "name": "Maura Sweetland",
+    "company": "Databricks",
+    "title": "Technical Recruiter",
+    "email": "maura.sweetland@databricks.com",
+    "linkedin": "https://www.linkedin.com/in/maurasweetland/",
+    "current_info": ""
+  },
+  {
+    "name": "Lauren Steitz",
+    "company": "Databricks",
+    "title": "University Recruiter",
+    "email": "lauren.steitz@databricks.com",
+    "linkedin": "https://www.linkedin.com/in/lauren-steitz/",
+    "current_info": ""
+  },
+  {
+    "name": "Jacquelyn Quezada",
+    "company": "Databricks",
+    "title": "College Relations Coordinator",
+    "email": "jacquelyn.quezada@databricks.com",
+    "linkedin": "https://www.linkedin.com/in/jacquelynquezada/",
+    "current_info": ""
+  },
+  {
+    "name": "Inbar Gam",
+    "company": "Databricks",
+    "title": "Senior University Recruiter",
+    "email": "inbar.gam@databricks.com",
+    "linkedin": "https://www.linkedin.com/in/inbargam/",
+    "current_info": ""
+  },
+  {
+    "name": "Shiloah Vasquez",
+    "company": "NVIDIA",
+    "title": "University Recruiter",
+    "email": "svasquez@nvidia.com",
+    "linkedin": "https://www.linkedin.com/in/shiloah-vasquez/",
+    "current_info": ""
+  },
+  {
+    "name": "Christopher Ruether",
+    "company": "NVIDIA",
+    "title": "Technical University Recruiter",
+    "email": "cruether@nvidia.com",
+    "linkedin": "https://www.linkedin.com/in/christopher-ruether/",
+    "current_info": ""
+  },
+  {
+    "name": "Andie Summers",
+    "company": "Databricks",
+    "title": "University Recruiter",
+    "email": "andie.summers@databricks.com",
+    "linkedin": "https://www.linkedin.com/in/andie-summers/",
+    "current_info": ""
+  },
+  {
+    "name": "Ruben Casillan",
+    "company": "Apple",
+    "title": "Senior Technical Recruiter",
+    "email": "rcasillan@apple.com",
+    "linkedin": "https://www.linkedin.com/in/rcasillan/",
+    "current_info": "Senior Technical Recruiter at Apple (Feb 2013–present) based in Cupertino; previously Account Manager/Sr. Technical Recruiter at TEKsystems; has shared Apple developer-related updates in public posts."
+  },
+  {
+    "name": "Dianna Chourarath",
+    "company": "Apple",
+    "title": "Technical Recruiter",
+    "email": "dchourarath@apple.com",
+    "linkedin": "https://www.linkedin.com/in/dianna-chourarath-296a7677/",
+    "current_info": ""
+  },
+  {
+    "name": "Heather Wang",
+    "company": "TikTok",
+    "title": "Technical Recruiter",
+    "email": "heather.wang@tiktok.com",
+    "linkedin": "https://www.linkedin.com/in/ailingwang/",
+    "current_info": ""
+  },
+  {
+    "name": "Dan Wang",
+    "company": "OpenAI",
+    "title": "Senior Technical Recruiter",
+    "email": "ru@openai.com",
+    "linkedin": "https://www.linkedin.com/in/rumeng-dan-wang/",
+    "current_info": "Member of Recruiting Staff, Technical Sourcer at OpenAI (Aug 2023–present); previously Senior Technical Sourcer at TikTok and sourcing/leadership roles at LinkedIn; has posted recruiting and interviewing content historically."
+  },
+  {
+    "name": "Nicky Johnson",
+    "company": "Stripe",
+    "title": "Technical Recruiter",
+    "email": "nicky@stripe.com",
+    "linkedin": "https://www.linkedin.com/in/nicolejohnson4",
+    "current_info": "Technical Recruiter at Stripe (Apr 2023–present) supporting Checkout & Billing teams; prior Recruiter at Tinder & Microsoft; recent post on team growth & new hiring opportunities."
+  },
+  {
+    "name": "Sukie Emerson",
+    "company": "Stripe",
+    "title": "Technical Recruiter",
+    "email": "sukie@stripe.com",
+    "linkedin": "https://www.linkedin.com/in/sukieemerson/",
+    "current_info": ""
+  },
+  {
+    "name": "Trevor Macabe",
+    "company": "Stripe",
+    "title": "Senior Technical Recruiter",
+    "email": "trevor@stripe.com",
+    "linkedin": "https://www.linkedin.com/in/trevormacabe/",
+    "current_info": "Senior Technical Recruiter at Reddit (Apr 2025–present) focused on SRE & Platform roles; formerly Senior Technical Recruiter at Stripe for Checkout (Jan 2023–Mar 2025) as sole recruiter managing 50+ hires."
+  },
+  {
+    "name": "Meah Gorokhov",
+    "company": "Stripe",
+    "title": "Technical Recruiter",
+    "email": "meah@stripe.com",
+    "linkedin": "https://www.linkedin.com/in/meah-gorokhov/",
+    "current_info": ""
+  },
+  {
+    "name": "Krystle Sanchez",
+    "company": "ServiceNow",
+    "title": "Senior Recruiter, Early In Career",
+    "email": "krystle.sanchez@servicenow.com",
+    "linkedin": "https://www.linkedin.com/in/krystlesanchez",
+    "current_info": "Senior Recruiter, Early in Career at ServiceNow (Jan 2024–present); prior University Recruiter (2019–2023); recent posts celebrating campus hiring events & employee spotlights."
+  },
+  {
+    "name": "Jessica Scherer",
+    "company": "ServiceNow",
+    "title": "Sr. Technical Recruiter, Early In Career",
+    "email": "jessica.scherer@servicenow.com",
+    "linkedin": "https://www.linkedin.com/in/jessicajscherer",
+    "current_info": "Sr. Technical Recruiter, Early in Career at ServiceNow (Mar 2024–present); previously Technical Recruiter at Atlassian; delivers diverse tech hiring strategies; no recent public posts found."
+  },
+  {
+    "name": "Kevin Hill",
+    "company": "ServiceNow",
+    "title": "Early In Career Recruiter",
+    "email": "kevin.hill@servicenow.com",
+    "linkedin": "https://www.linkedin.com/in/kevinhillrecruiter",
+    "current_info": "Early in Career Recruiter at ServiceNow (Aug 2023–present); former Associate Consultant at Accenture; focuses on university & early talent programs; no recent public posts available."
+  }
+]

@@ -42,7 +42,7 @@ def extract_name_and_company(email):
 def clean_placeholder_content(content):
     """Remove or replace placeholder content with generic professional content"""
     import re
-    
+
     # Common placeholder patterns to replace
     placeholder_patterns = [
         (r'\[Your [^\]]+\]', ''),
@@ -60,19 +60,27 @@ def clean_placeholder_content(content):
         (r'your qualifications here', 'relevant qualifications'),
         (r'your skills here', 'strong technical skills'),
     ]
-    
+
     # Apply replacements (case insensitive)
     for pattern, replacement in placeholder_patterns:
         content = re.sub(pattern, replacement, content, flags=re.IGNORECASE)
-    
+
     # Clean up any remaining brackets or braces that might contain placeholders
     content = re.sub(r'\[[^\]]*\]', '', content)
     content = re.sub(r'\{[^}]*\}', '', content)
-    
-    # Clean up extra spaces and line breaks
-    content = re.sub(r'\s+', ' ', content)
-    content = re.sub(r'\n\s*\n', '\n\n', content)
-    
+
+    # Clean up extra spaces but preserve paragraph breaks
+    # Replace multiple line breaks with double line breaks (proper paragraph spacing)
+    content = re.sub(r'\n\s*\n+', '\n\n', content)
+    # Remove trailing spaces from lines
+    lines = content.split('\n')
+    lines = [line.rstrip() for line in lines]
+    content = '\n'.join(lines)
+    # Clean up spaces within lines but not between paragraphs
+    lines = content.split('\n\n')
+    lines = [re.sub(r' +', ' ', line.strip()) for line in lines]
+    content = '\n\n'.join(lines)
+
     return content.strip()
 
 def generate_personalized_email(recipient_email, template=None, prompt=None, subject=None, customize_per_recipient=False, contact_context=None, sender_info=None):
@@ -139,34 +147,33 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
         elif prompt:
             # Use custom prompt
             customization_note = "\n\nIMPORTANT: Keep the core message consistent across all recipients. Only personalize names and companies." if not customize_per_recipient else "\n\nCreate unique, highly personalized content based on the recipient's specific company and industry."
-            
+
             ai_prompt = f"""
             {prompt}
-            
+
             Recipient Details:
             - Name: {name}
             - Company: {company}
             - Title: {title}
             - Email: {recipient_email}
             {f"- Additional Context: {contact_context}" if contact_context and contact_context.get('original_data') else ""}
-            
-            Sender Information (USE THIS FOR ANY PERSONAL DETAILS):
-            {sender_info if sender_info else "Professional with relevant experience seeking opportunities"}
-            
+
             CRITICAL INSTRUCTIONS - READ CAREFULLY:
-            - Generate both a compelling subject line and email body
-            - When you need information about the sender (like name, background, experience, education), ONLY use the "Sender Information" provided above
-            - NEVER make up names, majors, companies, or personal details about the sender
-            - If sender information is not provided for something specific, write in a general professional manner without specific personal details
-            - NEVER leave anything blank or as placeholder text like [Your Name], [Company], "your major here", etc.
+            - Generate both a professional subject line and email body
+            - The email body MUST be properly formatted with clear paragraph breaks
+            - Use proper spacing: separate each paragraph with a blank line
+            - Start with a professional greeting: "Dear [Name]," or "Hello [Name],"
+            - Organize the complaint clearly with logical paragraphs
+            - NEVER leave anything blank or as placeholder text like [Your Name], [Complaint Details], etc.
             - The email must be 100% complete and ready to send without any editing needed
             - DO NOT include any closing signatures, sign-offs, or closing statements like "Best regards," "Sincerely," etc.
             - The user will add their own signature separately
+            - DO NOT include phone numbers, addresses, or personal contact information (user's signature will include this)
             {customization_note}
-            
+
             Format your response as:
             SUBJECT: [subject line here]
-            BODY: [email body here]
+            BODY: [email body with proper paragraph breaks]
             """
         else:
             # Default AI generation
@@ -202,7 +209,7 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a professional email writing assistant. Generate complete, ready-to-send emails based on the user's requirements."
+                    "content": "You are a professional complaint email writing assistant. Generate complete, well-formatted, ready-to-send formal complaint emails based on the user's requirements. Always use proper paragraph formatting with blank lines between sections."
                 },
                 {
                     "role": "user",
@@ -210,7 +217,7 @@ def generate_personalized_email(recipient_email, template=None, prompt=None, sub
                 }
             ],
             max_tokens=1000,
-            temperature=0.7
+            temperature=0.9
         )
         
         content = completion.choices[0].message.content

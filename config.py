@@ -3,9 +3,9 @@ Configuration settings for Mail Agent
 """
 
 # App Configuration
-APP_TITLE = "📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬📬"
-APP_ICON = "📧"
-APP_DESCRIPTION = "Send mass personalized email with ease, no account needed."
+APP_TITLE = "PG&E Complaint Tool"
+APP_ICON = "⚡"
+APP_DESCRIPTION = "Send personalized complaints to PG&E and regulatory bodies about service issues."
 
 # Production Safety Settings
 PRODUCTION_MODE = True  # Set to False for development
@@ -22,29 +22,23 @@ EMAIL_PROMPT_HEIGHT = 100
 EMAIL_PATTERN = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
 
 # Default Values
-DEFAULT_EMAIL_TYPE = "regular"
+DEFAULT_EMAIL_TYPE = "ai"
 DEFAULT_CREATE_INBOX = True
 DEFAULT_PREVIEW_EMAILS = True
 DEFAULT_HUMAN_APPROVAL = False
 DEFAULT_CUSTOMIZE_PER_RECIPIENT = False
 
+# Recipients Configuration
+CITY_ORDINANCE_RECIPIENTS_FILE = "data/city_ordinance_recipients.json"
+
 # Placeholders
-RECIPIENTS_PLACEHOLDER = """john@company1.com
-mary@company2.com
-bob@startup.io
+RECIPIENTS_PLACEHOLDER = ""
 
-Or: john@company1.com, mary@company2.com"""
+EMAIL_TEMPLATE_PLACEHOLDER = ""
 
-EMAIL_TEMPLATE_PLACEHOLDER = """Hi {name},
+CUSTOM_PROMPT_PLACEHOLDER = ""
 
-I noticed your work at {company} and wanted to reach out about...
-
-Best regards,
-Your Name"""
-
-CUSTOM_PROMPT_PLACEHOLDER = "Write a professional email inviting them to a networking event in San Francisco next month"
-
-EMAIL_BODY_PLACEHOLDER = "Write your email message here..."
+EMAIL_BODY_PLACEHOLDER = ""
 
 # Messages
-FOOTER_TEXT = "ACM Outreach Tool" # "Created by "" [Kareem](https://github.com/ka-reem)"
+FOOTER_TEXT = "PG&E Complaint Tool"

@@ -52,5 +52,9 @@ def list_messages(inbox_id):
     return client.inboxes.messages.list(inbox_id=inbox_id)
 
 def get_message(inbox_id, message_id):
-    """Retrieve a specific message."""
-    return client.inboxes.messages.get(inbox_id=inbox_id, message_id=message_id)
+    """Retrieve a specific message with full content."""
+    try:
+        return client.inboxes.messages.get(inbox_id=inbox_id, message_id=message_id)
+    except Exception as e:
+        st.warning(f"Could not fetch full message {message_id}: {str(e)}")
+        return None

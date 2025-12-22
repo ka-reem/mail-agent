@@ -25,59 +25,68 @@ class EmailManager:
         self.selected_inbox = selected_inbox
     
     def generate_email_data(self, recipients: List[str], email_config: Dict, json_contacts: List[Dict] = None) -> List[Dict]:
-        """Generate email data for all recipients"""
+        """Generate email data for all recipients with progressive display"""
         email_data = []
-        
+
         # Get signature from session state if available
         signature = st.session_state.get('email_signature', '')
-        
+
         # Create a mapping from email to contact info if JSON contacts provided
         contact_mapping = {}
         if json_contacts:
             for contact in json_contacts:
                 contact_mapping[contact['email']] = contact
-        
-        for i, recipient in enumerate(recipients):
-            try:
-                if email_config['email_type'] == "regular":
-                    current_subject = email_config['subject']
-                    current_body = email_config['body']
-                else:
+
+        # Use status container to show generation progress
+        with st.status("Generating emails...", expanded=True) as status_container:
+            for i, recipient in enumerate(recipients):
+                try:
+                    st.write(f"📧 Generating email {i+1}/{len(recipients)} for {recipient}...")
+
                     # AI Email generation
-                    with st.spinner(f"Generating personalized email for {recipient}..."):
-                        # Get contact context if available
-                        contact_context = contact_mapping.get(recipient, None)
-                        
-                        # Get sender info from session state
-                        sender_info = st.session_state.get('sender_info', '')
-                        
-                        ai_result = generate_personalized_email(
-                            recipient_email=recipient,
-                            template=email_config.get('template'),
-                            prompt=email_config.get('prompt'),
-                            subject=email_config.get('subject'),
-                            customize_per_recipient=email_config.get('customize_per_recipient', False),
-                            contact_context=contact_context,
-                            sender_info=sender_info
-                        )
-                        current_subject = ai_result['subject']
-                        current_body = ai_result['body']
-                        
-                        # Add signature to AI-generated email if signature exists
-                        if signature:
-                            current_body = f"{current_body}\n\n{signature}"
-                
-                email_data.append({
-                    'recipient': recipient,
-                    'subject': current_subject,
-                    'body': current_body,
-                    'approved': False,
-                    'sent': False
-                })
-                
-            except Exception as e:
-                st.error(f"Failed to generate email for {recipient}: {e}")
-        
+                    # Get contact context if available
+                    contact_context = contact_mapping.get(recipient, None)
+
+                    # Get sender info from session state
+                    sender_info = st.session_state.get('sender_info', '')
+
+                    ai_result = generate_personalized_email(
+                        recipient_email=recipient,
+                        template=email_config.get('template'),
+                        prompt=email_config.get('prompt'),
+                        subject=email_config.get('subject'),
+                        customize_per_recipient=email_config.get('customize_per_recipient', False),
+                        contact_context=contact_context,
+                        sender_info=sender_info
+                    )
+                    current_subject = ai_result['subject']
+                    current_body = ai_result['body']
+
+                    # Add signature to AI-generated email if signature exists
+                    if signature:
+                        current_body = f"{current_body}\n\n{signature}"
+
+                    email_info = {
+                        'recipient': recipient,
+                        'subject': current_subject,
+                        'body': current_body,
+                        'approved': False,
+                        'sent': False
+                    }
+                    email_data.append(email_info)
+
+                    # Show each email in preview as it's generated
+                    with st.expander(f"✅ {recipient}", expanded=False):
+                        st.write(f"**Subject:** {current_subject}")
+                        st.write(f"**Body:**")
+                        st.write(current_body)
+
+                except Exception as e:
+                    st.error(f"Failed to generate email for {recipient}: {e}")
+                    st.write(f"❌ Failed for {recipient}")
+
+            status_container.update(label="✅ Email generation complete!", state="complete")
+
         return email_data
     
     def send_single_email(self, email_info: Dict) -> bool:
