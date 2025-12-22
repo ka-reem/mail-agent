@@ -13,83 +13,60 @@ st.write("View all your sent and received emails")
 # Batch size for pagination
 BATCH_SIZE = 15
 
-# Initialize session state
-if 'all_emails_loaded' not in st.session_state:
-    st.session_state.all_emails_loaded = False
-    st.session_state.all_messages = []
-    st.session_state.sent_emails = []
-    st.session_state.received_emails = []
-    st.session_state.current_batch = 1
+# Cache function to load and process emails efficiently
+@st.cache_resource
+def load_all_emails():
+    """Load and process emails from all inboxes once"""
+    try:
+        # Load all inboxes
+        all_inboxes = list_inboxes()
 
-try:
-    # Load all inboxes
-    all_inboxes = list_inboxes()
+        # Handle both dict and object responses
+        if hasattr(all_inboxes, 'inboxes'):
+            inboxes_list = all_inboxes.inboxes
+        elif isinstance(all_inboxes, dict) and 'inboxes' in all_inboxes:
+            inboxes_list = all_inboxes['inboxes']
+        else:
+            inboxes_list = []
 
-    # Handle both dict and object responses
-    if hasattr(all_inboxes, 'inboxes'):
-        inboxes_list = all_inboxes.inboxes
-    elif isinstance(all_inboxes, dict) and 'inboxes' in all_inboxes:
-        inboxes_list = all_inboxes['inboxes']
-    else:
-        inboxes_list = []
-
-    if not inboxes_list:
-        st.error("❌ No inboxes available. Please create an inbox first.")
-        st.stop()
-
-    # Load emails only once
-    if not st.session_state.all_emails_loaded:
-        st.info(f"📬 Loading emails from {len(inboxes_list)} inbox(es)...")
+        if not inboxes_list:
+            return None, None
 
         # Collect all messages from all inboxes
         all_messages = []
-
-        with st.spinner("Loading email list..."):
-            for inbox in inboxes_list:
-                # Handle both object and dict inbox formats
-                inbox_id = inbox.inbox_id if hasattr(inbox, 'inbox_id') else inbox.get('inbox_id')
-
-                try:
-                    messages_response = list_messages(inbox_id)
-
-                    # Handle both dict and object responses
-                    if hasattr(messages_response, 'messages'):
-                        messages_list = messages_response.messages
-                    elif isinstance(messages_response, dict) and 'messages' in messages_response:
-                        messages_list = messages_response['messages']
-                    else:
-                        messages_list = []
-
-                    all_messages.extend(messages_list)
-                except Exception as e:
-                    st.warning(f"Could not load messages from inbox {inbox_id}: {str(e)}")
-                    continue
+        for inbox in inboxes_list:
+            inbox_id = inbox.inbox_id if hasattr(inbox, 'inbox_id') else inbox.get('inbox_id')
+            try:
+                messages_response = list_messages(inbox_id)
+                if hasattr(messages_response, 'messages'):
+                    messages_list = messages_response.messages
+                elif isinstance(messages_response, dict) and 'messages' in messages_response:
+                    messages_list = messages_response['messages']
+                else:
+                    messages_list = []
+                all_messages.extend(messages_list)
+            except Exception:
+                continue
 
         if not all_messages:
-            st.info("📭 No emails found in any inbox.")
-            st.stop()
+            return None, None
 
-        # Separate sent and received emails (without fetching full content yet)
+        # Process emails efficiently
         sent_emails = []
         received_emails = []
 
         for email in all_messages:
             try:
-                # Extract fields from object attributes (don't fetch full content yet)
                 inbox_id = getattr(email, 'inbox_id', None)
                 message_id = getattr(email, 'message_id', None)
                 sender = getattr(email, 'from', None) or 'Unknown'
                 recipients = getattr(email, 'to', None) or []
                 subject = getattr(email, 'subject', None) or '(No Subject)'
                 date = getattr(email, 'created_at', None) or getattr(email, 'timestamp', None) or 'Unknown Date'
-                preview = getattr(email, 'preview', None) or 'No preview'
                 labels = getattr(email, 'labels', []) or []
 
                 # Convert recipients list to string
-                if isinstance(recipients, list):
-                    recipient_str = ', '.join(recipients) if recipients else 'Unknown'
-                else:
-                    recipient_str = str(recipients) if recipients else 'Unknown'
+                recipient_str = ', '.join(recipients) if isinstance(recipients, list) and recipients else str(recipients) if recipients else 'Unknown'
 
                 # Determine if sent or received based on labels
                 is_sent = 'sent' in labels if labels else False
@@ -99,8 +76,6 @@ try:
                     'message_id': message_id,
                     'subject': subject,
                     'date': date,
-                    'preview': preview,
-                    'labels': labels,
                     'body': None  # Will be fetched on-demand
                 }
 
@@ -113,19 +88,31 @@ try:
                     email_data['to'] = recipient_str
                     received_emails.append(email_data)
 
-            except Exception as e:
-                st.warning(f"Could not process email: {str(e)}")
+            except Exception:
                 continue
 
-        # Store in session state
-        st.session_state.sent_emails = sent_emails
-        st.session_state.received_emails = received_emails
-        st.session_state.all_emails_loaded = True
-        st.session_state.current_batch = 1
+        return sent_emails, received_emails
 
-    # Get current batch of emails
-    sent_emails = st.session_state.sent_emails
-    received_emails = st.session_state.received_emails
+    except Exception:
+        return None, None
+
+# Load emails using cache
+sent_emails, received_emails = load_all_emails()
+
+# Initialize session state for pagination
+if 'current_batch' not in st.session_state:
+    st.session_state.current_batch = 1
+
+try:
+    if sent_emails is None or received_emails is None:
+        st.error("❌ No inboxes available. Please create an inbox first.")
+        st.stop()
+
+    if not sent_emails and not received_emails:
+        st.info("📭 No emails found in any inbox.")
+        st.stop()
+
+    # Get current batch of emails from cache
     current_batch = st.session_state.current_batch
 
     # Calculate pagination - show only current page

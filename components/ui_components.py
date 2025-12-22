@@ -19,17 +19,28 @@ def display_fixed_recipients(contacts: List[Dict], complaint_type: str = "PG&E")
 
     # Initialize selected recipients in session state if not present
     if 'selected_recipients' not in st.session_state:
-        # Pre-select all PG&E contacts by default
+        # For City Ordinance, only pre-select PG&E contacts
+        # For PG&E, select all filtered contacts (which is all PG&E)
         selected = []
-        for contact in filtered_contacts:
-            selected.append(contact.get('email', ''))
+        if complaint_type == "City Ordinance":
+            pge_contacts = [c for c in filtered_contacts if c.get('org') == 'PG&E']
+            for contact in pge_contacts:
+                selected.append(contact.get('email', ''))
+        else:
+            for contact in filtered_contacts:
+                selected.append(contact.get('email', ''))
         st.session_state.selected_recipients = selected
 
     # If complaint type changed, update selections
     if 'last_complaint_type' not in st.session_state or st.session_state.last_complaint_type != complaint_type:
         selected = []
-        for contact in filtered_contacts:
-            selected.append(contact.get('email', ''))
+        if complaint_type == "City Ordinance":
+            pge_contacts = [c for c in filtered_contacts if c.get('org') == 'PG&E']
+            for contact in pge_contacts:
+                selected.append(contact.get('email', ''))
+        else:
+            for contact in filtered_contacts:
+                selected.append(contact.get('email', ''))
         st.session_state.selected_recipients = selected
         st.session_state.last_complaint_type = complaint_type
 
@@ -52,6 +63,27 @@ def display_fixed_recipients(contacts: List[Dict], complaint_type: str = "PG&E")
         for org_name in org_names:
             org_contacts = orgs[org_name]
             with st.expander(f"{org_name} ({len(org_contacts)} contacts)", expanded=False):
+                # Subtle "all" button on the right to select/deselect all contacts
+                col1, col2, col3 = st.columns([0.8, 0.1, 0.1])
+                org_emails = [c.get('email', '') for c in org_contacts]
+                org_all_selected = all(email in st.session_state.selected_recipients for email in org_emails)
+
+                with col3:
+                    if st.button(
+                        "all" if not org_all_selected else "none",
+                        key=f"org_toggle_{org_name}",
+                        use_container_width=True
+                    ):
+                        if org_all_selected:
+                            for email in org_emails:
+                                if email in st.session_state.selected_recipients:
+                                    st.session_state.selected_recipients.remove(email)
+                        else:
+                            for email in org_emails:
+                                if email not in st.session_state.selected_recipients:
+                                    st.session_state.selected_recipients.append(email)
+                        st.rerun()
+
                 for contact in org_contacts:
                     email = contact.get('email', '')
                     contact_type = contact.get('type', '')
